@@ -872,22 +872,35 @@ function renderPfPage() {
   const availH = Math.max(pfViewportWrap.clientHeight - 48, 100);
   const fitScale = Math.min(availW / PF_NATURAL_W, availH / PF_NATURAL_H);
   const scale = fitScale * pfZoom;
-  pfImg.style.width = Math.round(PF_NATURAL_W * scale) + 'px';
-  pfImg.style.height = Math.round(PF_NATURAL_H * scale) + 'px';
+  const w = Math.round(PF_NATURAL_W * scale) + 'px';
+  const h = Math.round(PF_NATURAL_H * scale) + 'px';
   pfPageLabel.textContent = pfPageNum + ' / ' + PF_PAGE_COUNT;
   const url = pfPageUrl(pfPageNum);
-  if (pfImg.getAttribute('data-loaded-src') === url) return;
-  pfLoading.style.display = 'block';
-  pfImg.style.display = 'none';
-  pfImg.onload = function () {
-    pfLoading.style.display = 'none';
+  if (pfImg.getAttribute('data-loaded-src') === url) {
+    pfImg.style.width = w;
+    pfImg.style.height = h;
+    return;
+  }
+  // Preload off-screen and only swap the visible image once it's ready, so switching
+  // pages never shows a loading flash — the current page just stays put until the
+  // next one is ready (which is instant for prefetched neighbors).
+  const pending = new Image();
+  pending.onload = function () {
+    if (pfPageUrl(pfPageNum) !== url) return; // user moved on before this finished
+    pfImg.src = url;
+    pfImg.style.width = w;
+    pfImg.style.height = h;
     pfImg.style.display = 'block';
+    pfLoading.style.display = 'none';
     pfImg.setAttribute('data-loaded-src', url);
     pfPrefetch(pfPageNum + 1);
     pfPrefetch(pfPageNum - 1);
   };
-  pfImg.onerror = pfShowError;
-  pfImg.src = url;
+  pending.onerror = function () {
+    if (pfPageUrl(pfPageNum) !== url) return;
+    pfShowError();
+  };
+  pending.src = url;
 }
 
 function openPortfolio() {
