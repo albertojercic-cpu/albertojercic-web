@@ -268,10 +268,11 @@
         </div>
       </div>
 
-      <!-- pdf viewer (rendered with pdf.js onto a canvas, so it doesn't depend on the browser's native PDF plugin) -->
+      <!-- portfolio viewer: each page is a pre-rendered image (exported from the source PDF), so it always
+           looks exactly like the original design regardless of browser/PDF-plugin quirks -->
       <div id="pfViewportWrap" style="flex:1; min-height:0; position:relative; background:#5a5551; overflow:auto; display:flex; align-items:flex-start; justify-content:center;">
         <div id="pfLoading" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(237,233,224,0.75); font-size:14.4px; text-align:center; padding:0 24px;">Cargando portafolio…</div>
-        <canvas id="pfCanvas" style="display:none; margin:24px auto; box-shadow:0 8px 24px rgba(0,0,0,0.4);"></canvas>
+        <img id="pfImg" alt="" style="display:none; margin:24px auto; box-shadow:0 8px 24px rgba(0,0,0,0.4);" />
       </div>
 
     </div>
@@ -839,85 +840,64 @@ function closeTimeline() {
 
 const portfolioOverlay = document.getElementById('portfolioOverlay');
 const pfViewportWrap = document.getElementById('pfViewportWrap');
-const pfCanvas = document.getElementById('pfCanvas');
+const pfImg = document.getElementById('pfImg');
 const pfLoading = document.getElementById('pfLoading');
 const pfPageLabel = document.getElementById('pfPageLabel');
-const PF_PDF_URL = 'portafolio-alberto-jercic.pdf';
-const PDFJS_JS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-const PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const PF_PAGE_COUNT = 24;
+const PF_NATURAL_W = 2667;
+const PF_NATURAL_H = 1500;
+
+function pfPageUrl(n) {
+  return 'portafolio/page-' + (n < 10 ? '0' + n : '' + n) + '.jpg';
+}
 
 let pfLoaded = false;
-let pfDoc = null;
 let pfPageNum = 1;
 let pfZoom = 1;
-let pfRendering = false;
-let pfRenderQueued = false;
 
-function ensurePdfJsLoaded() {
-  return new Promise(function (resolve, reject) {
-    if (window.pdfjsLib) { resolve(); return; }
-    const s = document.createElement('script');
-    s.src = PDFJS_JS;
-    s.onload = function () {
-      window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
-      resolve();
-    };
-    s.onerror = function () { reject(new Error('pdfjs failed to load')); };
-    document.head.appendChild(s);
-  });
+function pfPrefetch(n) {
+  if (n < 1 || n > PF_PAGE_COUNT) return;
+  const im = new Image();
+  im.src = pfPageUrl(n);
 }
 
 function pfShowError() {
-  pfLoading.textContent = 'No se pudo cargar la vista previa del portafolio aquí. Usa "Abrir en pestaña" para verlo.';
+  pfLoading.textContent = 'No se pudo cargar la vista previa del portafolio aquí.';
   pfLoading.style.display = 'block';
-  pfCanvas.style.display = 'none';
+  pfImg.style.display = 'none';
 }
 
-async function renderPfPage() {
-  if (!pfDoc) return;
-  if (pfRendering) { pfRenderQueued = true; return; }
-  pfRendering = true;
-  try {
-    const page = await pfDoc.getPage(pfPageNum);
-    const unscaled = page.getViewport({ scale: 1 });
-    const availW = Math.max(pfViewportWrap.clientWidth - 48, 100);
-    const availH = Math.max(pfViewportWrap.clientHeight - 48, 100);
-    const fitScale = Math.min(availW / unscaled.width, availH / unscaled.height);
-    const viewport = page.getViewport({ scale: fitScale * pfZoom });
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    pfCanvas.width = Math.round(viewport.width * dpr);
-    pfCanvas.height = Math.round(viewport.height * dpr);
-    pfCanvas.style.width = Math.round(viewport.width) + 'px';
-    pfCanvas.style.height = Math.round(viewport.height) + 'px';
-    const ctx = pfCanvas.getContext('2d');
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+function renderPfPage() {
+  const availW = Math.max(pfViewportWrap.clientWidth - 48, 100);
+  const availH = Math.max(pfViewportWrap.clientHeight - 48, 100);
+  const fitScale = Math.min(availW / PF_NATURAL_W, availH / PF_NATURAL_H);
+  const scale = fitScale * pfZoom;
+  pfImg.style.width = Math.round(PF_NATURAL_W * scale) + 'px';
+  pfImg.style.height = Math.round(PF_NATURAL_H * scale) + 'px';
+  pfPageLabel.textContent = pfPageNum + ' / ' + PF_PAGE_COUNT;
+  const url = pfPageUrl(pfPageNum);
+  if (pfImg.getAttribute('data-loaded-src') === url) return;
+  pfLoading.style.display = 'block';
+  pfImg.style.display = 'none';
+  pfImg.onload = function () {
     pfLoading.style.display = 'none';
-    pfCanvas.style.display = 'block';
-    pfPageLabel.textContent = pfPageNum + ' / ' + pfDoc.numPages;
-  } catch (err) {
-    pfShowError();
-  } finally {
-    pfRendering = false;
-    if (pfRenderQueued) { pfRenderQueued = false; renderPfPage(); }
-  }
+    pfImg.style.display = 'block';
+    pfImg.setAttribute('data-loaded-src', url);
+    pfPrefetch(pfPageNum + 1);
+    pfPrefetch(pfPageNum - 1);
+  };
+  pfImg.onerror = pfShowError;
+  pfImg.src = url;
 }
 
-async function openPortfolio() {
+function openPortfolio() {
   document.body.style.overflow = 'hidden';
   portfolioOverlay.style.display = 'flex';
   if (pfLoaded) { renderPfPage(); return; }
   pfLoaded = true;
-  try {
-    await ensurePdfJsLoaded();
-    const task = window.pdfjsLib.getDocument(PF_PDF_URL);
-    pfDoc = await task.promise;
-    pfPageNum = 1;
-    pfZoom = 1;
-    await renderPfPage();
-  } catch (err) {
-    pfShowError();
-  }
+  pfPageNum = 1;
+  pfZoom = 1;
+  renderPfPage();
 }
 function closePortfolio() {
   document.body.style.overflow = '';
@@ -931,10 +911,10 @@ function closePortfolio() {
 document.getElementById('btnPortfolio').addEventListener('click', openPortfolio);
 document.getElementById('btnPortfolioClose').addEventListener('click', closePortfolio);
 document.getElementById('pfPrev').addEventListener('click', function () {
-  if (pfDoc && pfPageNum > 1) { pfPageNum--; renderPfPage(); }
+  if (pfLoaded && pfPageNum > 1) { pfPageNum--; renderPfPage(); }
 });
 document.getElementById('pfNext').addEventListener('click', function () {
-  if (pfDoc && pfPageNum < pfDoc.numPages) { pfPageNum++; renderPfPage(); }
+  if (pfLoaded && pfPageNum < PF_PAGE_COUNT) { pfPageNum++; renderPfPage(); }
 });
 document.getElementById('pfZoomOut').addEventListener('click', function () {
   pfZoom = Math.max(0.5, pfZoom - 0.2);
@@ -959,10 +939,10 @@ document.getElementById('pfFullscreen').addEventListener('click', function () {
 });
 document.addEventListener('fullscreenchange', function () {
   if (!document.fullscreenElement) portfolioOverlay.classList.remove('pf-fullscreen');
-  if (portfolioOverlay.style.display === 'flex' && pfDoc) setTimeout(renderPfPage, 60);
+  if (portfolioOverlay.style.display === 'flex' && pfLoaded) setTimeout(renderPfPage, 60);
 });
 window.addEventListener('resize', function () {
-  if (portfolioOverlay.style.display === 'flex' && pfDoc) renderPfPage();
+  if (portfolioOverlay.style.display === 'flex' && pfLoaded) renderPfPage();
 });
 
 function equalizeCtaButtonWidths() {
@@ -1088,8 +1068,8 @@ viewport.addEventListener('touchend', function (e) {
 window.addEventListener('keydown', function (e) {
   if (e.key === 'Escape' && overlay.style.display === 'flex') closeTimeline();
   if (e.key === 'Escape' && portfolioOverlay.style.display === 'flex') closePortfolio();
-  if (portfolioOverlay.style.display === 'flex' && pfDoc) {
-    if (e.key === 'ArrowRight' && pfPageNum < pfDoc.numPages) { pfPageNum++; renderPfPage(); }
+  if (portfolioOverlay.style.display === 'flex' && pfLoaded) {
+    if (e.key === 'ArrowRight' && pfPageNum < PF_PAGE_COUNT) { pfPageNum++; renderPfPage(); }
     if (e.key === 'ArrowLeft' && pfPageNum > 1) { pfPageNum--; renderPfPage(); }
   }
 });
