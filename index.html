@@ -187,7 +187,7 @@
 
       <div style="font-size:15px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:19.2px;">Formación continua</div>
       <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(312px,1fr)); gap:16.8px 33.6px;">
-        <div style="font-size:16.2px; line-height:1.5;"><strong>Workshop BIM (Revit) + IA (Claude)</strong><br><span style="color:var(--muted);">The BIM CO-WORK · 08/2026 – 11/2026</span></div>
+        <div style="font-size:16.2px; line-height:1.5;"><strong>Workshop BIM (Revit) + IA (Claude)</strong><br><span style="color:var(--muted);">The BIM CO-WORK · 08/2026 – 11/2026</span><br><a href="habitaculo/" target="_blank" rel="noopener" style="display:inline-block; margin-top:10px; padding:8px 20px; border-radius:999px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); font-size:13px; font-weight:600; letter-spacing:.02em; text-decoration:none;">Ver proyecto Habitáculo →</a></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Curso de IA Generativa como herramienta creativa</strong><br><span style="color:var(--muted);">Rodrigo Ocharán · 05/2026</span></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Automatización y Coordinación BIM con Dynamo</strong><br><span style="color:var(--muted);">Universidad Federico Santa María · 01/2026</span></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Taller Avanzado de Inteligencia Artificial</strong><br><span style="color:var(--muted);">El Feo Revollo · 02/2025</span></div>
@@ -325,6 +325,20 @@
 
 </div>
 
+<div id="pfLock" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(20,16,14,0.55); align-items:center; justify-content:center; padding:16px;">
+  <form id="pfLockForm" style="width:min(380px,100%); background:var(--on-ink); color:var(--ink); border-radius:21.6px; padding:30px 28px 26px; box-shadow:0 20px 60px rgba(0,0,0,.3); font-family:inherit;">
+    <div style="font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; opacity:.62; margin-bottom:10px;">Acceso privado</div>
+    <div style="font-size:21.6px; font-weight:800; margin-bottom:6px;">Portafolio</div>
+    <div style="font-size:14.4px; line-height:1.5; opacity:.75; margin-bottom:18px;">Ingresa la contraseña para ver el portafolio.</div>
+    <label for="pfLockInput" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);">Contraseña</label>
+    <input id="pfLockInput" type="password" autocomplete="current-password" placeholder="Contraseña" style="width:100%; box-sizing:border-box; font:inherit; font-size:15.6px; padding:12px 16px; border-radius:999px; border:1px solid rgba(57,47,43,.3); background:#fff; color:var(--ink); outline-color:var(--ink);">
+    <div id="pfLockMsg" aria-live="polite" style="min-height:20px; font-size:13px; color:#9b3b2b; margin:8px 4px 6px;"></div>
+    <div style="display:flex; gap:10px; justify-content:flex-end;">
+      <button type="button" id="pfLockCancel" style="cursor:pointer; font:inherit; font-size:14.4px; font-weight:600; padding:11px 22px; border-radius:999px; border:1px solid rgba(57,47,43,.3); background:transparent; color:var(--ink);">Cancelar</button>
+      <button type="submit" style="cursor:pointer; font:inherit; font-size:14.4px; font-weight:600; padding:11px 26px; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--on-ink);">Entrar</button>
+    </div>
+  </form>
+</div>
 <script>
 const PROJECTS = [
   {c:'licitaciones',y:2019,t:'LICITACIÓN JARDÍN BOTÁNICO CHAGUAL SANTIAGO, R.M.'},
@@ -921,7 +935,40 @@ function closePortfolio() {
   }
   portfolioOverlay.classList.remove('pf-fullscreen');
 }
-document.getElementById('btnPortfolio').addEventListener('click', openPortfolio);
+// Acceso temporal con contraseña al portafolio (se guarda solo el hash, no la clave)
+const PF_PASS_HASH = '292ff9b57506228af93442578476732c8effef45a2ef9f67031788ce9c8d017e';
+async function pfHash(txt) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
+  return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+}
+function pfUnlocked() { try { return sessionStorage.getItem('pfOk') === '1'; } catch (e) { return false; } }
+const pfLock = document.getElementById('pfLock');
+const pfLockInput = document.getElementById('pfLockInput');
+const pfLockMsg = document.getElementById('pfLockMsg');
+function openPfLock() {
+  pfLock.style.display = 'flex';
+  pfLockMsg.textContent = '';
+  pfLockInput.value = '';
+  setTimeout(function () { pfLockInput.focus(); }, 30);
+}
+function closePfLock() { pfLock.style.display = 'none'; }
+document.getElementById('pfLockForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  if (await pfHash(pfLockInput.value.trim()) === PF_PASS_HASH) {
+    try { sessionStorage.setItem('pfOk', '1'); } catch (err) {}
+    closePfLock();
+    openPortfolio();
+  } else {
+    pfLockMsg.textContent = 'Contraseña incorrecta. Inténtalo de nuevo.';
+    pfLockInput.select();
+  }
+});
+document.getElementById('pfLockCancel').addEventListener('click', closePfLock);
+pfLock.addEventListener('click', function (e) { if (e.target === pfLock) closePfLock(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pfLock.style.display === 'flex') closePfLock(); });
+document.getElementById('btnPortfolio').addEventListener('click', function () {
+  if (pfUnlocked()) openPortfolio(); else openPfLock();
+});
 document.getElementById('btnPortfolioClose').addEventListener('click', closePortfolio);
 document.getElementById('pfPrev').addEventListener('click', function () {
   if (pfLoaded && pfPageNum > 1) { pfPageNum--; renderPfPage(); }
