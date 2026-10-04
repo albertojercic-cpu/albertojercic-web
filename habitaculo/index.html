@@ -79,7 +79,8 @@
   .lista .n { font-size: 12px; font-weight: 600; color: var(--cafe-62); font-variant-numeric: tabular-nums; }
   .lista a:hover .n, .lista a:focus-visible .n { color: var(--crema-66); }
   .lista .t { font-size: clamp(16px, 1.6vw, 19px); font-weight: 600; }
-  .lista .m { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cafe-62); white-space: nowrap; }
+  .lista .m small { display: block; margin-top: 4px; font-size: 10.5px; letter-spacing: .04em; text-transform: none; opacity: .85; text-align: right; }
+  .lista .m { text-align: right; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cafe-62); white-space: nowrap; }
   .lista a:hover .m, .lista a:focus-visible .m { color: var(--crema-66); }
   .lista svg { width: 18px; height: 18px; justify-self: end; }
   .lista .off { opacity: .45; cursor: default; }
@@ -96,8 +97,9 @@
     footer .flujo { text-align: left; }
     .entrega-in { grid-template-columns: 1fr; }
     .marca span:last-child { display: none; }
-    .lista .m { display: none; }
-    .lista a, .lista .off { grid-template-columns: 30px minmax(0, 1fr) 24px; }
+    .lista .m { display: block; font-size: 0; }
+    .lista .m small { font-size: 10.5px; margin-top: 0; }
+    .lista a, .lista .off { grid-template-columns: 30px minmax(0, 1fr) auto 24px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .stage .poster, .mouse i { animation: none; }
@@ -178,10 +180,10 @@ const CONFIG = {
   ],
   // href: null = aparece como "Próximamente"
   descargas: [
-    { titulo: "Presentación Conceptual",      formato: "PDF · 2.2 MB", href: "descargas/01_Presentacion_Conceptual_Habitaculo_AJercic.pdf" },
-    { titulo: "Plan de Ejecución BIM (PEB)",  formato: "PDF · 0.4 MB", href: "descargas/02_PEB_Habitaculo_NDI1_AJercic.pdf" },
-    { titulo: "Parámetros Compartidos",       formato: "ZIP · 36 KB",  href: "descargas/03_Parametros_Compartidos_AJercic.zip" },
-    { titulo: "Especificaciones Técnicas",    formato: "ZIP · 0.3 MB", href: "descargas/04_Especificaciones_Tecnicas_AJercic.zip" },
+    { titulo: "Presentación Conceptual",      formato: "PDF · 2.2 MB", fecha: "14/09/2026", href: "descargas/01_Presentacion_Conceptual_Habitaculo_AJercic.pdf" },
+    { titulo: "Plan de Ejecución BIM (PEB)",  formato: "PDF · 0.4 MB", fecha: "14/09/2026", href: "descargas/02_PEB_Habitaculo_NDI1_AJercic.pdf" },
+    { titulo: "Parámetros Compartidos",       formato: "ZIP · 36 KB",  fecha: "14/09/2026", href: "descargas/03_Parametros_Compartidos_AJercic.zip" },
+    { titulo: "Especificaciones Técnicas",    formato: "ZIP · 0.3 MB", fecha: "14/09/2026", href: "descargas/04_Especificaciones_Tecnicas_AJercic.zip" },
     { titulo: "Modelo Revit",                 formato: "RVT · 250 MB", href: null },
     { titulo: "Planos ARQ",                   formato: "PDF",          href: null },
     { titulo: "Exportación IFC",              formato: "IFC",          href: null }
@@ -194,7 +196,7 @@ document.getElementById("lista").innerHTML = CONFIG.descargas.map((d, i) => {
   const n = String(i + 1).padStart(2, "0");
   const externo = d.href && /^https?:/.test(d.href);
   return d.href
-    ? `<li><a href="${d.href}" ${externo ? 'target="_blank" rel="noopener"' : "download"}><span class="n">${n}</span><span class="t">${d.titulo}</span><span class="m">${d.formato}</span>${flecha}</a></li>`
+    ? `<li><a href="${d.href}" ${externo ? 'target="_blank" rel="noopener"' : "download"}><span class="n">${n}</span><span class="t">${d.titulo}</span><span class="m">${d.formato}${d.fecha ? `<small>Actualizado ${d.fecha}</small>` : ""}</span>${flecha}</a></li>`
     : `<li><span class="off"><span class="n">${n}</span><span class="t">${d.titulo}</span><span class="m">Próximamente</span></span></li>`;
 }).join("");
 
