@@ -187,7 +187,7 @@
 
       <div style="font-size:15px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:19.2px;">Formación continua</div>
       <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(312px,1fr)); gap:16.8px 33.6px;">
-        <div style="font-size:16.2px; line-height:1.5;"><strong>Workshop BIM (Revit) + IA (Claude)</strong><br><span style="color:var(--muted);">The BIM CO-WORK · 08/2026 – 11/2026</span><br><a href="habitaculo/" target="_blank" rel="noopener" style="display:inline-block; margin-top:10px; padding:8px 20px; border-radius:999px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); font-size:13px; font-weight:600; letter-spacing:.02em; text-decoration:none;">Ver proyecto Habitáculo →</a></div>
+        <div style="font-size:16.2px; line-height:1.5;"><strong>Workshop BIM (Revit) + IA (Claude)</strong><br><span style="color:var(--muted);">The BIM CO-WORK · 08/2026 – 11/2026</span><br><a href="habitaculo/" id="btnHabitaculo" style="display:inline-block; margin-top:10px; padding:8px 20px; border-radius:999px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); font-size:13px; font-weight:600; letter-spacing:.02em; text-decoration:none;">Ver proyecto Habitáculo →</a></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Curso de IA Generativa como herramienta creativa</strong><br><span style="color:var(--muted);">Rodrigo Ocharán · 05/2026</span></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Automatización y Coordinación BIM con Dynamo</strong><br><span style="color:var(--muted);">Universidad Federico Santa María · 01/2026</span></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Taller Avanzado de Inteligencia Artificial</strong><br><span style="color:var(--muted);">El Feo Revollo · 02/2025</span></div>
@@ -275,6 +275,21 @@
         <img id="pfImg" alt="" style="display:none; margin:24px auto; box-shadow:0 8px 24px rgba(0,0,0,0.4);" />
       </div>
 
+    </div>
+  </div>
+
+  <!-- ============ PROYECTO HABITÁCULO (se abre sobre el CV, igual que Portafolio) ============ -->
+  <div id="habOverlay" style="position:fixed; inset:0; background:rgba(20,16,14,0.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.4vh 1.4vw; box-sizing:border-box;">
+    <div style="width:100%; height:100%; max-width:2320px; background:var(--ink); color:var(--on-ink); border-radius:21.6px; box-shadow:0 24px 72px rgba(0,0,0,0.45); overflow:hidden; display:flex; flex-direction:column;">
+      <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(237,233,224,0.05); border-bottom:1px solid rgba(237,233,224,0.14); position:relative;">
+        <div class="tl-title" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:15.6px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Habitáculo y Refugio Turístico</div>
+        <div class="tl-controls" style="margin-left:auto; display:flex; align-items:center; gap:9.6px;">
+          <button id="btnHabClose" title="Cerrar" aria-label="Cerrar" class="tl-closebtn" style="cursor:pointer; font-family:inherit; width:30px; height:30px; border-radius:50%; border:none; background:#FFFFFF; color:var(--ink); display:flex; align-items:center; justify-content:center; padding:0; flex:none;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#392F2B" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"></path></svg>
+          </button>
+        </div>
+      </div>
+      <iframe id="habFrame" title="Proyecto Habitáculo y Refugio Turístico" style="flex:1; min-height:0; width:100%; border:0; display:block; background:var(--ink);"></iframe>
     </div>
   </div>
 
@@ -935,6 +950,26 @@ function closePortfolio() {
   }
   portfolioOverlay.classList.remove('pf-fullscreen');
 }
+// Proyecto Habitáculo: se abre en una ventana sobre el CV
+const habOverlay = document.getElementById('habOverlay');
+const habFrame = document.getElementById('habFrame');
+function openHabitaculo(e) {
+  if (e) e.preventDefault();
+  if (!habFrame.getAttribute('src')) habFrame.setAttribute('src', 'habitaculo/');
+  document.body.style.overflow = 'hidden';
+  habOverlay.style.display = 'flex';
+  setTimeout(function () { try { habFrame.contentWindow.focus(); } catch (err) {} }, 60);
+}
+function closeHabitaculo() {
+  document.body.style.overflow = '';
+  habOverlay.style.display = 'none';
+  try { var v = habFrame.contentDocument && habFrame.contentDocument.getElementById('portada'); if (v) v.pause(); } catch (err) {}
+}
+document.getElementById('btnHabitaculo').addEventListener('click', openHabitaculo);
+document.getElementById('btnHabClose').addEventListener('click', closeHabitaculo);
+habOverlay.addEventListener('click', function (e) { if (e.target === habOverlay) closeHabitaculo(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && habOverlay.style.display === 'flex') closeHabitaculo(); });
+
 // Acceso temporal con contraseña al portafolio (se guarda solo el hash, no la clave)
 const PF_PASS_HASH = '292ff9b57506228af93442578476732c8effef45a2ef9f67031788ce9c8d017e';
 async function pfHash(txt) {
