@@ -81,6 +81,10 @@
   @media (max-width: 700px){
     .cta-hint{ white-space:normal !important; font-size:14.4px !important; max-width:30ch; text-wrap:balance; }
   }
+
+  /* Botones de contacto en el pie (WhatsApp / LinkedIn) */
+  .foot-social{ width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(237,233,224,0.35); color:var(--on-ink); transition:background .2s, color .2s, border-color .2s; }
+  .foot-social:hover, .foot-social:focus-visible{ background:var(--on-ink); color:var(--ink); border-color:var(--on-ink); outline:none; }
 </style>
 </head>
 <body>
@@ -301,11 +305,11 @@
       <button id="btnPortfolio" class="cta-btn" style="cursor:pointer; font-family:inherit; border-radius:999px; padding:15.6px 43.2px; font-size:15.6px; font-weight:600; letter-spacing:0.02em; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); white-space:nowrap; text-align:center; box-sizing:border-box;">Portafolio</button>
       <button id="btnTimeline" class="cta-btn" style="cursor:pointer; font-family:inherit; border-radius:999px; padding:15.6px 43.2px; font-size:15.6px; font-weight:600; letter-spacing:0.02em; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); white-space:nowrap; text-align:center; box-sizing:border-box;">Línea de tiempo</button>
     </div>
-    <div class="cta-hint" style="font-size:clamp(11px,1.7vw,16.2px); line-height:1.6; color:var(--on-ink-muted); white-space:nowrap;">Haz click en los botones para acceder al portafolio de proyectos o explorar la línea de tiempo completa.</div>
+    <div class="cta-hint" style="font-size:clamp(11px,1.7vw,16.2px); line-height:1.6; color:var(--on-ink-muted); white-space:nowrap;">Haz clic en los botones para acceder al portafolio de proyectos o explorar la línea de tiempo completa.</div>
   </div>
   <!-- ============ FOOTER ============ -->
   <div style="width:calc(100% - 2*clamp(28.8px,6vw,57.6px)); max-width:calc(1416px - 2*clamp(28.8px,6vw,57.6px)); margin:0 auto; padding:28px 0 40px; box-sizing:border-box; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14.4px; color:var(--on-ink-muted); border-top:1px solid rgba(237,233,224,0.14);">
-    <div>Alberto Jercic Martinic — Arquitecto</div>
+    <div style="display:flex; align-items:center; gap:10px;"><a class="foot-social" href="https://wa.me/56963343498" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" title="Escribir por WhatsApp"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></a><a class="foot-social" href="https://www.linkedin.com/in/albertojercicarquitecto" target="_blank" rel="noopener" aria-label="Perfil de LinkedIn" title="Perfil de LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3V9.75zm7 0h3.83v1.54h.05c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13V21h-4v-4.98c0-1.19-.02-2.72-1.66-2.72-1.66 0-1.91 1.3-1.91 2.63V21h-4V9.75z"/></svg></a><span style="margin-left:6px;">Arq. Alberto Jercic Martinic</span></div>
     <div id="fechaActualizado">Actualizado 10/2026</div>
   </div>
   </div>
@@ -420,8 +424,8 @@ const PROJECTS = [
   {c:'licitaciones',y:2021,t:'CONCURSO MALL ESPACIO URBANO|PROTECCIÓN DE FACHADAS'},
   {c:'licitaciones',y:2021,t:'CONCURSO EXC-ARCEL TALCA R. DEL MAULE, 32.000 m2'},
   {c:'licitaciones',y:2021,t:'LICITACIÓN RODOVIARIO AYSEN R. DE AYSÉN, 1.500 m2'},
-  {c:'licitaciones',y:2021,t:'CONCURSO PARQUE OBS. Cº CALÀN|LAS CONDES, R.M. , 45.000 m2'},
-  {c:'licitaciones',y:2022,t:'LICITACIÒN DS49: VILLA NACIMIENTO 63 VIVIENDAS. LA PINTANA, R.M. 3.869 m2',bim:true},
+  {c:'licitaciones',y:2021,t:'CONCURSO PARQUE OBS. Cº CALÁN|LAS CONDES, R.M. , 45.000 m2'},
+  {c:'licitaciones',y:2022,t:'LICITACIÓN DS49: VILLA NACIMIENTO 63 VIVIENDAS. LA PINTANA, R.M. 3.869 m2',bim:true},
   {c:'licitaciones',y:2022,t:'CONCURSO BADe (BIBLIOTECA, DEPOSITO|Y ARCHIVO REGIONAL DE VALDIVIA)~REGION DE LOS RÍOS. 10.237 m2',bim:true},
   {c:'licitaciones',y:2024,t:'CONCURSO MALL VIVO ÑUBLE~ORLANDO GATICA STUDIO.'},
   {c:'licitaciones',y:2024,t:'CONCURSO CMPC CENTRO I+D~NACIMIENTO'},
@@ -430,7 +434,7 @@ const PROJECTS = [
   {c:'licitaciones',y:2025,t:'CONCURSO OFICINAS MERCADO LIBRE.~TORRE COSTANERA CENTER. GANADORES'},
   {c:'licitaciones',y:2026,t:'REMODELACIÓN EDIFICIO PLAZA GOLF~LAS CONDES.'},
   {c:'oficinas',y:2020,t:'RESTAURACIÓN I.C.H OFICINAS ALAMEDA 1948 SANTIAGO, R.M. 1.200 m2'},
-  {c:'oficinas',y:2020,t:'OFICINAS COMISIÓN NACIONAL DE ACREITACIÓN. C.N.A SANTIAGO, R.M. 1.550 m2'},
+  {c:'oficinas',y:2020,t:'OFICINAS COMISIÓN NACIONAL DE ACREDITACIÓN. C.N.A SANTIAGO, R.M. 1.550 m2'},
   {c:'oficinas',y:2024,t:'STAND CODELPA. Expo EDIFICA. 24 m2. Espacio Riesco.'},
   {c:'oficinas',y:2025,t:'OFICINAS CARIOLA DÍEZ DÍAS-COTAPOS ABOGADOS Edificio Torre Costanera, Vitacura.',bim:true},
   {c:'oficinas',y:2025,t:'OFICINAS DITEC SUR Ciudad Empresarial. Huechuraba.',bim:true},
@@ -448,7 +452,7 @@ const PROJECTS = [
   {c:'vivienda',y:2021,t:'REMOD. VI. CULIPRÁN 2. MELIPILLA, SANTIAGO, R.M. 240 m2'},
   {c:'vivienda',y:2021,t:'VIVIENDA HH NONGUÉN. CONCEPCIÓN, R. DEL BIOBÍO. 280 m2'},
   {c:'vivienda',y:2021,t:'VIVIENDA LO OROZCO. C. BLANCA, R. DE VALPARAÍSO. 229 m2'},
-  {c:'vivienda',y:2021,t:'VIVIENDA LAS AÑAÑUCAS. LIMACE, R. DE VALPARAÍSO. 280 m2'},
+  {c:'vivienda',y:2021,t:'VIVIENDA LAS AÑAÑUCAS. LIMACHE, R. DE VALPARAÍSO. 280 m2'},
   {c:'vivienda',y:2021,t:'VIVIENDA LOS ESTANQUES. LO BARNECHEA, R.M. 1.200 m2',bim:true},
   {c:'vivienda',y:2022,t:'M.P CONDOMINIO VILUCO 272 VIVIENDAS. R. DEL MAULE.',bim:true},
   {c:'vivienda',y:2022,t:'EDIFICIO DE RENTA C.W SAN MIGUEL, R.M. 3.293 m2',bim:true},
@@ -470,8 +474,8 @@ const PROJECTS = [
   {c:'vivienda',y:2025,t:'PORTERÍAS PROYECTO VITAPARK.~HUECHURABA'},
   {c:'vivienda',y:2025,t:'EDIFICIO WYNWOOD. ICALMA.~ÑUÑOA'},
   {c:'vivienda',y:2025,t:'VIVIENDA CASA FLORIDA.~CHILLAN',bim:true},
-  {c:'vivienda',y:2026,t:'EDFICIO FEEL. INMOBILIARIA CONTEMPLA.~ÑUÑOA'},
-  {c:'vivienda',y:2026,t:'EDFICIO BELEN. NAHMIAS LAUDA.~LAS CONDES'},
+  {c:'vivienda',y:2026,t:'EDIFICIO FEEL. INMOBILIARIA CONTEMPLA.~ÑUÑOA'},
+  {c:'vivienda',y:2026,t:'EDIFICIO BELEN. NAHMIAS LAUDA.~LAS CONDES'},
   {c:'vivienda',y:2026,t:'VIVIENDA PUERTO PRAT. PUERTO NATALES, REGIÓN DE MAGALLANES.',bim:true},
   {c:'retail',y:2017,t:'C MORAN. MALL P. ARAUCO. 48 m2'},
   {c:'retail',y:2017,t:'MARURI. MALL P. A. ESTACIÓN. 17 m2'},
@@ -479,7 +483,7 @@ const PROJECTS = [
   {c:'retail',y:2017,t:'BEAUTY A. MALL P. A. ESTACIÓN. 18 m2'},
   {c:'retail',y:2017,t:'TABACO & V. MALL P. A. ESTACIÓN. 17 m2'},
   {c:'retail',y:2017,t:'GABY NAILS. MALL LA CISTERNA. 14 m2'},
-  {c:'retail',y:2017,t:'JUGETERÍA CTS. MALL LA CISTERNA. 21 m2'},
+  {c:'retail',y:2017,t:'JUGUETERÍA CTS. MALL LA CISTERNA. 21 m2'},
   {c:'retail',y:2018,t:'ROSA DE LOS VIENTOS. Mall Vivo. 47 m2'},
   {c:'retail',y:2018,t:'C MORAN. Viña del Mar. 49 m2'},
   {c:'retail',y:2018,t:'C MORAN. RANCAGUA. 48 m2'},
@@ -506,7 +510,7 @@ const PROJECTS = [
   {c:'retail',y:2024,t:'STAND CODELPA EXPO EDIFICA 2024.'},
   {c:'retail',y:2025,t:'MINIMARKET H19 RANCAGUA.'},
   {c:'retail',y:2025,t:'CASA IDEAS FICHAS TÉCNICAS MOBILIARIO STORE PLANNING'},
-  {c:'retail',y:2025,t:'LOLCAL NOOKI COSTANERA CENTER'},
+  {c:'retail',y:2025,t:'LOCAL NOOKI COSTANERA CENTER'},
   {c:'retail',y:2025,t:'SHOWROOM CONTATTO VITACURA'},
   {c:'retail',y:2026,t:'MASTERPLAN MALL VIVO LOS TRAPENSES~LO BARNECHEA'},
   {c:'retail',y:2026,t:'KARTING ELISEO SALAZAR~MALL PLAZA OESTE',bim:true},
