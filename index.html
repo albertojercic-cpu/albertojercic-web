@@ -47,11 +47,57 @@
   }
   #portfolioOverlay.pf-fullscreen{ padding:0 !important; }
   #portfolioOverlay.pf-fullscreen #portfolioModalBox{ border-radius:0 !important; max-width:none !important; }
+
+  /* ---- Galería superior ---- */
+  #galStrip{ width:100%; box-sizing:border-box; background:var(--ink); color:var(--on-ink); padding:clamp(14px,2vw,24px) 0 0; position:relative; }
+  #galTrack{ display:flex; gap:clamp(10px,1.4vw,18px); overflow-x:auto; cursor:grab; padding:0 clamp(14px,2vw,24px); scroll-padding:0 clamp(14px,2vw,24px); -webkit-overflow-scrolling:touch; scrollbar-width:none; outline:none; }
+  #galTrack::-webkit-scrollbar{ display:none; }
+  .gal-slide{ flex:none; height:clamp(220px,56vh,620px); aspect-ratio:2200/1338; border-radius:14px; overflow:hidden; background:rgba(237,233,224,0.06); position:relative; }
+  .gal-slide img{ width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none; }
+  .gal-arrow{ position:absolute; top:calc(50% - 20px); width:44px; height:44px; border-radius:50%; border:1px solid rgba(237,233,224,0.35); background:rgba(57,47,43,0.72); backdrop-filter:blur(6px); color:var(--on-ink); font-family:inherit; font-size:22px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; z-index:2; transition:background .2s, opacity .2s; }
+  .gal-arrow:hover{ background:rgba(57,47,43,0.95); }
+  .gal-arrow[disabled]{ opacity:0; pointer-events:none; }
+  #galPrev{ left:clamp(18px,2.6vw,34px); } #galNext{ right:clamp(18px,2.6vw,34px); }
+  #galDots{ display:flex; justify-content:center; align-items:center; gap:8px; padding:14px 0 2px; }
+  .gal-dot{ width:7px; height:7px; border-radius:50%; border:none; padding:0; background:rgba(237,233,224,0.3); cursor:pointer; transition:all .25s; }
+  .gal-dot.on{ background:var(--on-ink); width:22px; border-radius:4px; }
+  @media (max-width:700px){
+    .gal-slide{ height:auto; width:84vw; aspect-ratio:2200/1338; border-radius:10px; }
+    .gal-arrow{ display:none; }
+  }
+
+  /* Formación: misma grilla que Formación continua; el Máster ocupa 2 columnas y Arquitecto se alinea con la 3ª */
+  @media (min-width: 1280px){
+    .edu-row{ grid-template-columns: repeat(auto-fill, minmax(312px,1fr)) !important; gap: 16.8px 33.6px !important; }
+    .edu-master{ grid-column: span 2; }
+    .edu-master > div{ white-space: nowrap; }
+  }
+
+  /* Botones claros sobre la franja café inferior */
+  .cta-band .cta-btn{ background:var(--on-ink) !important; color:var(--ink) !important; border-color:var(--on-ink) !important; }
+  .cta-band .cta-btn:hover{ background:#fff !important; border-color:#fff !important; }
 </style>
 </head>
 <body>
 
 <div style="width:100%; box-sizing:border-box; background:var(--paper); color:var(--ink); font-family:'Urbanist',ui-sans-serif,system-ui,sans-serif;">
+
+  <!-- ============ GALERÍA SUPERIOR ============ -->
+  <section id="galStrip" aria-label="Galería de imágenes">
+    <div style="position:relative;">
+      <div id="galTrack" tabindex="0">
+        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-1.jpg" alt="Render 1" draggable="false"></figure>
+        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-2.jpg" alt="Render 2" draggable="false" loading="lazy"></figure>
+        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-3.jpg" alt="Render 3" draggable="false" loading="lazy"></figure>
+        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-4.jpg" alt="Render 4" draggable="false" loading="lazy"></figure>
+        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-5.jpg" alt="Render 5" draggable="false" loading="lazy"></figure>
+        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-6.jpg" alt="Render 6" draggable="false" loading="lazy"></figure>
+      </div>
+      <button id="galPrev" class="gal-arrow" aria-label="Imagen anterior">‹</button>
+      <button id="galNext" class="gal-arrow" aria-label="Imagen siguiente">›</button>
+    </div>
+    <div id="galDots"></div>
+  </section>
 
   <!-- ============ HERO ============ -->
   <div style="width:100%; box-sizing:border-box; background:var(--ink); color:var(--on-ink);">
@@ -59,7 +105,7 @@
       <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:28px;">
         <div style="display:flex; flex-direction:column;">
           <h1 style="margin:0; font-size:clamp(38.4px,5.5vw,60px); font-weight:800; letter-spacing:0.01em; line-height:1.04;">Alberto Jercic Martinic</h1>
-          <div style="font-size:18px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-top:16.8px;">Arquitecto <span style="font-weight:400; letter-spacing:0.02em; text-transform:none; color:var(--on-ink-muted);">· Universidad de Chile</span></div>
+          <div style="font-size:18px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-top:clamp(22px,2.4vw,32px);">Arquitecto <span style="font-weight:400; letter-spacing:0.02em; text-transform:none; color:var(--on-ink-muted);">· Universidad de Chile</span></div>
           <div style="font-size:18px; font-weight:400; color:var(--on-ink-muted); margin-top:4.8px;">Máster en Gestión BIM de proyectos de Arquitectura e Interiorismo</div>
         </div>
         <div style="flex:1; min-width:12px;"></div>
@@ -72,7 +118,7 @@
   </div>
 
   <!-- ============ BIO ============ -->
-  <div style="max-width:1416px; margin:0 auto; padding:clamp(33.6px,4.8vw,52.8px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
+  <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
     <div style="display:flex; flex-direction:column; gap:16.8px; font-size:18.6px; line-height:1.7; color:var(--ink); text-align:justify;">
       <p style="margin:0;">Arquitecto de la Universidad de Chile y Máster en Gestión BIM de proyectos de arquitectura e interiorismo, con más de 7 años de trayectoria en proyectos residenciales, inmobiliarios, retail, oficinas y concursos.</p>
       <p style="margin:0; color:var(--ink);">Especializado en metodología BIM (Revit, Archicad, Dynamo, Navisworks) para la documentación planimétrica, cubicaciones, modelado y coordinación de especialidades previo y durante el desarrollo de obra, integrando una visión estética y técnica con representación digital avanzada — renders hiperrealistas e Inteligencia Artificial generativa.</p>
@@ -82,7 +128,7 @@
   <div style="max-width:1416px; margin:0 auto; padding:0 clamp(28.8px,6vw,57.6px); box-sizing:border-box;"><div style="height:1px; background:var(--line);"></div></div>
 
   <!-- ============ EXPERIENCIA ============ -->
-  <div style="max-width:1416px; margin:0 auto; padding:clamp(43.2px,6vw,67.2px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
+  <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
     <div style="display:flex; align-items:baseline; justify-content:space-between; gap:19.2px; margin-bottom:clamp(26.4px,3.6vw,40.8px); flex-wrap:wrap;">
       <h2 style="margin:0; font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Experiencia</h2>
       <div style="font-size:15.6px; color:var(--muted); letter-spacing:0.04em;">2017 — Actualidad</div>
@@ -151,7 +197,7 @@
         </ul>
       </div>
 
-      <div class="cv-row" style="display:grid; grid-template-columns: 264px 1fr; gap:33.6px; padding:26.4px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+      <div class="cv-row" style="display:grid; grid-template-columns: 264px 1fr; gap:33.6px; padding:26.4px 0 0; border-top:1px solid var(--line);">
         <div>
           <div style="font-size:16.8px; font-weight:700;">Práctica profesional y posterior colaboración</div>
           <div style="font-size:15.6px; font-weight:600; color:var(--muted-strong); margin-top:3.6px;">Saintard &amp; Tognarelli</div>
@@ -165,13 +211,15 @@
     </div>
   </div>
 
+  <div style="max-width:1416px; margin:0 auto; padding:0 clamp(28.8px,6vw,57.6px); box-sizing:border-box;"><div style="height:1px; background:var(--line);"></div></div>
+
   <!-- ============ FORMACIÓN ============ -->
   <div style="width:100%; background:var(--paper);">
-    <div style="max-width:1416px; margin:0 auto; padding:clamp(43.2px,6vw,67.2px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
-      <h2 style="margin:0 0 clamp(26.4px,3.6vw,38.4px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Formación</h2>
+    <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
+      <h2 style="margin:0 0 clamp(44px,5.4vw,64px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Formación</h2>
 
-      <div class="edu-row" style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:33.6px; margin-bottom:36px;">
-        <div>
+      <div class="edu-row" style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:clamp(48px,8vw,128px); margin-bottom:36px;">
+        <div class="edu-master">
           <div style="font-size:17.4px; font-weight:700; line-height:1.4;">Máster Internacional en Gestión BIM de proyectos de arquitectura e interiorismo</div>
           <div style="font-size:15.6px; font-weight:600; color:var(--muted-strong); margin-top:7.2px; line-height:1.5;">UCAM Universidad Católica de Murcia · EADIC Escuela Abierta de Desarrollo en Ingeniería y Construcción</div>
           <div style="font-size:14.4px; color:var(--muted); margin-top:7.2px;">11/2023 — 11/2024</div>
@@ -200,9 +248,11 @@
     </div>
   </div>
 
+  <div style="max-width:1416px; margin:0 auto; padding:0 clamp(28.8px,6vw,57.6px); box-sizing:border-box;"><div style="height:1px; background:var(--line);"></div></div>
+
   <!-- ============ PROGRAMAS ============ -->
-  <div style="max-width:1416px; margin:0 auto; padding:clamp(43.2px,6vw,67.2px) clamp(28.8px,6vw,57.6px) clamp(86.4px,10.8vw,132px); box-sizing:border-box;">
-    <h2 style="margin:0 0 clamp(26.4px,3.6vw,38.4px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Programas</h2>
+  <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
+    <h2 style="margin:0 0 clamp(44px,5.4vw,64px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Programas</h2>
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(228px,1fr)); gap:33.6px;">
       <div>
         <div style="font-size:15px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted-strong); margin-bottom:24px;">Modelado 3D</div>
@@ -238,14 +288,20 @@
     </div>
   </div>
 
-  <!-- ============ CTA: PORTAFOLIO / LÍNEA DE TIEMPO ============ -->
-  <div style="max-width:1416px; margin:0 auto; padding:0 clamp(28.8px,6vw,57.6px); box-sizing:border-box;"><div style="height:1px; background:var(--line);"></div></div>
-  <div style="max-width:1416px; margin:0 auto; padding:clamp(43.2px,6vw,67.2px) clamp(28.8px,6vw,57.6px) clamp(57.6px,8vw,96px); box-sizing:border-box; display:flex; flex-direction:column; align-items:center; text-align:center; gap:19.2px;">
-    <div class="cta-row" style="display:flex; align-items:center; justify-content:center; gap:24px; flex-wrap:wrap;">
+  <!-- ============ CTA: PORTAFOLIO / LÍNEA DE TIEMPO (franja café inferior, junto al pie) ============ -->
+  <div class="cta-band" style="width:100%; background:var(--ink); color:var(--on-ink);">
+  <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px) clamp(57.6px,8vw,96px); box-sizing:border-box; display:flex; flex-direction:column; align-items:center; text-align:center; gap:19.2px;">
+    <div class="cta-row" style="display:flex; align-items:center; justify-content:center; gap:clamp(28px,4vw,56px); flex-wrap:wrap;">
       <button id="btnPortfolio" class="cta-btn" style="cursor:pointer; font-family:inherit; border-radius:999px; padding:15.6px 43.2px; font-size:15.6px; font-weight:600; letter-spacing:0.02em; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); white-space:nowrap; text-align:center; box-sizing:border-box;">Portafolio</button>
       <button id="btnTimeline" class="cta-btn" style="cursor:pointer; font-family:inherit; border-radius:999px; padding:15.6px 43.2px; font-size:15.6px; font-weight:600; letter-spacing:0.02em; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); white-space:nowrap; text-align:center; box-sizing:border-box;">Línea de tiempo</button>
     </div>
-    <div style="font-size:clamp(11px,1.7vw,16.2px); line-height:1.6; color:var(--muted-strong); white-space:nowrap;">Haz click en los botones para acceder al portafolio de proyectos o explorar la línea de tiempo completa.</div>
+    <div style="font-size:clamp(11px,1.7vw,16.2px); line-height:1.6; color:var(--on-ink-muted); white-space:nowrap;">Haz click en los botones para acceder al portafolio de proyectos o explorar la línea de tiempo completa.</div>
+  </div>
+  <!-- ============ FOOTER ============ -->
+  <div style="width:calc(100% - 2*clamp(28.8px,6vw,57.6px)); max-width:calc(1416px - 2*clamp(28.8px,6vw,57.6px)); margin:0 auto; padding:28px 0 40px; box-sizing:border-box; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14.4px; color:var(--on-ink-muted); border-top:1px solid rgba(237,233,224,0.14);">
+    <div>Alberto Jercic Martinic — Arquitecto</div>
+    <div id="fechaActualizado">Actualizado 10/2026</div>
+  </div>
   </div>
 
   <!-- ============ PORTFOLIO MODAL (opens over the CV, closeable) ============ -->
@@ -332,11 +388,6 @@
     </div>
   </div>
 
-  <!-- ============ FOOTER ============ -->
-  <div style="max-width:1416px; margin:0 auto; padding:31.2px clamp(28.8px,6vw,57.6px) 48px; box-sizing:border-box; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14.4px; color:var(--muted);">
-    <div>Alberto Jercic Martinic — Arquitecto</div>
-    <div>Actualizado 09/2026</div>
-  </div>
 
 </div>
 
@@ -1170,6 +1221,53 @@ window.addEventListener('keydown', function (e) {
 });
 
 updateTransform();
+</script>
+<script>
+(function(){
+  var track=document.getElementById('galTrack'); if(!track) return;
+  var slides=[].slice.call(track.querySelectorAll('.gal-slide'));
+  var prev=document.getElementById('galPrev'), next=document.getElementById('galNext'), dotsEl=document.getElementById('galDots');
+  var dots=slides.map(function(_,i){ var b=document.createElement('button'); b.className='gal-dot'; b.setAttribute('aria-label','Ir a imagen '+(i+1)); b.addEventListener('click',function(){ go(i); }); dotsEl.appendChild(b); return b; });
+  function cur(){ var x=track.scrollLeft+8, best=0; slides.forEach(function(sl,i){ if(sl.offsetLeft-track.offsetLeft<=x+ (parseFloat(getComputedStyle(track).paddingLeft)||0)) best=i; }); if(track.scrollLeft+track.clientWidth>=track.scrollWidth-4) best=slides.length-1; return best; }
+  function go(i){ i=Math.max(0,Math.min(slides.length-1,i)); track.scrollTo({left:slides[i].offsetLeft-track.offsetLeft-(parseFloat(getComputedStyle(track).paddingLeft)||0), behavior:'smooth'}); }
+  function upd(){ var c=cur(); dots.forEach(function(d,i){ d.classList.toggle('on',i===c); }); prev.disabled=track.scrollLeft<=4; next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-4; }
+  // flechas: buscan la imagen anterior/siguiente según la posición real (sirve aunque esté al final o entre dos imágenes)
+  function pos(i){ return slides[i].offsetLeft-track.offsetLeft-(parseFloat(getComputedStyle(track).paddingLeft)||0); }
+  function stopGlide(){ if(typeof raf!=='undefined' && raf){ cancelAnimationFrame(raf); raf=0; } }
+  function goPrev(){ stopGlide(); var x=track.scrollLeft, max=track.scrollWidth-track.clientWidth; if(x>=max-4){ for(var i=slides.length-1;i>=0;i--){ if(pos(i)<max-4){ go(i); return; } } } for(var j=slides.length-1;j>=0;j--){ if(pos(j)<x-4){ go(j); return; } } go(0); }
+  function goNext(){ stopGlide(); var x=track.scrollLeft; for(var i=0;i<slides.length;i++){ if(pos(i)>x+4){ go(i); return; } } go(slides.length-1); }
+  prev.addEventListener('click',goPrev);
+  next.addEventListener('click',goNext);
+  track.addEventListener('scroll',function(){ window.requestAnimationFrame(upd); },{passive:true});
+  track.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'){ e.preventDefault(); goNext();} if(e.key==='ArrowLeft'){ e.preventDefault(); goPrev();} });
+  window.addEventListener('resize',upd);
+  // arrastre con mouse en escritorio
+  // arrastre libre con inercia (mouse): al soltar, la galería sigue deslizándose y frena suavemente
+  var down=false,sx=0,sl0=0,moved=false,vel=0,raf=0,muestras=[];
+  function glide(){
+    vel*=0.94;                                   // fricción: más cerca de 1 = desliza más lejos
+    if(Math.abs(vel)<0.02){ raf=0; return; }
+    var antes=track.scrollLeft; track.scrollLeft-=vel*16;
+    if(track.scrollLeft===antes){ raf=0; return; } // llegó al borde
+    raf=requestAnimationFrame(glide);
+  }
+  track.addEventListener('dragstart',function(e){ e.preventDefault(); });
+  track.addEventListener('click',function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); } },true);
+  track.addEventListener('mousedown',function(e){ if(e.button!==0) return; cancelAnimationFrame(raf); raf=0; down=true; moved=false; sx=e.pageX; sl0=track.scrollLeft; muestras=[{x:e.pageX,t:performance.now()}]; track.style.cursor='grabbing'; });
+  window.addEventListener('mousemove',function(e){ if(!down) return; var dx=e.pageX-sx; if(Math.abs(dx)>3) moved=true; track.scrollLeft=sl0-dx; var t=performance.now(); muestras.push({x:e.pageX,t:t}); while(muestras.length>2 && t-muestras[0].t>100) muestras.shift(); });
+  window.addEventListener('mouseup',function(){
+    if(!down) return; down=false; track.style.cursor='';
+    var t=performance.now(); if(!moved || muestras.length<2 || t-muestras[muestras.length-1].t>120) return;
+    var a=muestras[0], b=muestras[muestras.length-1]; vel=(b.x-a.x)/Math.max(16,b.t-a.t)*1.2;
+    vel=Math.max(-6,Math.min(6,vel)); if(!raf) raf=requestAnimationFrame(glide);
+  });
+  upd();
+})();
+</script>
+
+<script>
+// Fecha de actualización automática: usa la fecha en que se publicó la página (GitHub Pages la informa)
+(function(){ var el=document.getElementById('fechaActualizado'); if(!el) return; var d=new Date(document.lastModified); if(isNaN(d)) return; el.textContent='Actualizado '+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear(); })();
 </script>
 </body>
 </html>
