@@ -92,6 +92,24 @@
   footer a { color: var(--crema); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
 
+  /* ---------- Renders (galería horizontal) ---------- */
+  .renders { background: var(--cafe); padding: clamp(56px, 9vh, 110px) 0 clamp(48px, 8vh, 96px); }
+  .renders-head { padding: 0 var(--gutter); margin: 0 auto clamp(22px, 3vh, 32px); max-width: 1440px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .renders-head p { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--crema-66); }
+  .renders-head span { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--crema-66); }
+  .rd-wrap { position: relative; }
+  .rd-track { display: flex; gap: clamp(10px, 1.4vw, 18px); overflow-x: auto; cursor: grab; padding: 0 var(--gutter); scrollbar-width: none; outline: none; -webkit-overflow-scrolling: touch; }
+  .rd-track::-webkit-scrollbar { display: none; }
+  .rd-slide { flex: none; margin: 0; height: clamp(220px, 58vh, 640px); aspect-ratio: 2200 / 1338; border-radius: 14px; overflow: hidden; background: rgba(237,233,224,.06); }
+  .rd-slide img { width: 100%; height: 100%; object-fit: cover; display: block; user-select: none; -webkit-user-drag: none; }
+  .rd-arrow { position: absolute; top: calc(50% - 22px); width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(237,233,224,.35); background: rgba(57,47,43,.72); backdrop-filter: blur(6px); color: var(--crema); font: inherit; font-size: 22px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; z-index: 2; transition: background .2s, opacity .2s; }
+  .rd-arrow:hover { background: rgba(57,47,43,.95); }
+  .rd-arrow[disabled] { opacity: 0; pointer-events: none; }
+  .rd-prev { left: clamp(18px, 2.6vw, 34px); } .rd-next { right: clamp(18px, 2.6vw, 34px); }
+  .rd-dots { display: flex; justify-content: center; gap: 8px; padding-top: 16px; }
+  .rd-dot { width: 7px; height: 7px; border-radius: 50%; border: none; padding: 0; background: rgba(211,201,191,.22); cursor: pointer; transition: all .25s; }
+  .rd-dot.on { background: rgba(211,201,191,.6); width: 22px; border-radius: 4px; }
+  @media (max-width: 820px) { .rd-slide { height: auto; width: 84vw; border-radius: 10px; } .rd-arrow { display: none; } }
   @media (max-width: 820px) {
     .marco { width: calc(100vw - 32px); }
     footer .flujo { text-align: left; }
@@ -130,6 +148,23 @@
     <div class="barra" id="barra"><i></i></div>
     </div>
   </div>
+</section>
+
+<section class="renders" id="renders" aria-label="Renders del proyecto">
+  <div class="renders-head"><p>Renders del proyecto</p><span>Arrastra para ver más</span></div>
+  <div class="rd-wrap">
+    <div class="rd-track" id="rdTrack" tabindex="0">
+        <figure class="rd-slide"><img src="../galeria/encuadre-1.jpg" alt="Render 1 del Habitáculo y Refugio Turístico" draggable="false"></figure>
+        <figure class="rd-slide"><img src="../galeria/encuadre-2.jpg" alt="Render 2 del Habitáculo y Refugio Turístico" draggable="false" loading="lazy"></figure>
+        <figure class="rd-slide"><img src="../galeria/encuadre-3.jpg" alt="Render 3 del Habitáculo y Refugio Turístico" draggable="false" loading="lazy"></figure>
+        <figure class="rd-slide"><img src="../galeria/encuadre-4.jpg" alt="Render 4 del Habitáculo y Refugio Turístico" draggable="false" loading="lazy"></figure>
+        <figure class="rd-slide"><img src="../galeria/encuadre-5.jpg" alt="Render 5 del Habitáculo y Refugio Turístico" draggable="false" loading="lazy"></figure>
+        <figure class="rd-slide"><img src="../galeria/encuadre-6.jpg" alt="Render 6 del Habitáculo y Refugio Turístico" draggable="false" loading="lazy"></figure>
+    </div>
+    <button class="rd-arrow rd-prev" id="rdPrev" type="button" aria-label="Imagen anterior">‹</button>
+    <button class="rd-arrow rd-next" id="rdNext" type="button" aria-label="Imagen siguiente">›</button>
+  </div>
+  <div class="rd-dots" id="rdDots"></div>
 </section>
 
 <section class="entrega" id="entrega">
@@ -316,6 +351,41 @@ document.getElementById("lista").innerHTML = CONFIG.descargas.map((d, i) => {
   addEventListener("resize", ajustar);
   ajustar();
   requestAnimationFrame(bucle);
+})();
+
+/* ---------- Renders: arrastre libre con inercia, flechas y puntos ---------- */
+(() => {
+  const track = document.getElementById("rdTrack"); if (!track) return;
+  const slides = [...track.querySelectorAll(".rd-slide")];
+  const prev = document.getElementById("rdPrev"), next = document.getElementById("rdNext"), dotsEl = document.getElementById("rdDots");
+  const padL = () => parseFloat(getComputedStyle(track).paddingLeft) || 0;
+  const pos = i => slides[i].offsetLeft - track.offsetLeft - padL();
+  const go = i => { i = Math.max(0, Math.min(slides.length - 1, i)); track.scrollTo({ left: pos(i), behavior: "smooth" }); };
+  const dots = slides.map((_, i) => { const b = document.createElement("button"); b.type = "button"; b.className = "rd-dot"; b.setAttribute("aria-label", "Ir a imagen " + (i + 1)); b.addEventListener("click", () => { stop(); go(i); }); dotsEl.appendChild(b); return b; });
+  const max = () => track.scrollWidth - track.clientWidth;
+  function cur() { let best = 0; slides.forEach((_, i) => { if (pos(i) <= track.scrollLeft + 8) best = i; }); if (track.scrollLeft >= max() - 4) best = slides.length - 1; return best; }
+  function upd() { const c = cur(); dots.forEach((d, i) => d.classList.toggle("on", i === c)); prev.disabled = track.scrollLeft <= 4; next.disabled = track.scrollLeft >= max() - 4; }
+  function goPrev() { stop(); const x = track.scrollLeft; for (let i = slides.length - 1; i >= 0; i--) if (pos(i) < Math.min(x, max()) - 4) return go(i); go(0); }
+  function goNext() { stop(); const x = track.scrollLeft; for (let i = 0; i < slides.length; i++) if (pos(i) > x + 4) return go(i); go(slides.length - 1); }
+  prev.addEventListener("click", goPrev); next.addEventListener("click", goNext);
+  track.addEventListener("scroll", () => requestAnimationFrame(upd), { passive: true });
+  track.addEventListener("keydown", e => { if (e.key === "ArrowRight") { e.preventDefault(); goNext(); } if (e.key === "ArrowLeft") { e.preventDefault(); goPrev(); } });
+  addEventListener("resize", upd);
+  // arrastre con mouse e inercia al soltar
+  let down = false, sx = 0, sl0 = 0, moved = false, vel = 0, raf = 0, muestras = [];
+  function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+  function glide() { vel *= 0.94; if (Math.abs(vel) < 0.02) { raf = 0; return; } const a = track.scrollLeft; track.scrollLeft -= vel * 16; if (track.scrollLeft === a) { raf = 0; return; } raf = requestAnimationFrame(glide); }
+  track.addEventListener("dragstart", e => e.preventDefault());
+  track.addEventListener("click", e => { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
+  track.addEventListener("mousedown", e => { if (e.button !== 0) return; stop(); down = true; moved = false; sx = e.pageX; sl0 = track.scrollLeft; muestras = [{ x: e.pageX, t: performance.now() }]; track.style.cursor = "grabbing"; });
+  addEventListener("mousemove", e => { if (!down) return; const dx = e.pageX - sx; if (Math.abs(dx) > 3) moved = true; track.scrollLeft = sl0 - dx; const t = performance.now(); muestras.push({ x: e.pageX, t }); while (muestras.length > 2 && t - muestras[0].t > 100) muestras.shift(); });
+  addEventListener("mouseup", () => {
+    if (!down) return; down = false; track.style.cursor = "";
+    const t = performance.now(); if (!moved || muestras.length < 2 || t - muestras[muestras.length - 1].t > 120) return;
+    const a = muestras[0], b = muestras[muestras.length - 1]; vel = Math.max(-6, Math.min(6, (b.x - a.x) / Math.max(16, b.t - a.t) * 1.2));
+    if (!raf) raf = requestAnimationFrame(glide);
+  });
+  upd();
 })();
 </script>
 </body>

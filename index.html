@@ -48,23 +48,26 @@
   #portfolioOverlay.pf-fullscreen{ padding:0 !important; }
   #portfolioOverlay.pf-fullscreen #portfolioModalBox{ border-radius:0 !important; max-width:none !important; }
 
-  /* ---- Galería superior ---- */
-  #galStrip{ width:100%; box-sizing:border-box; background:var(--ink); color:var(--on-ink); padding:clamp(28px,4vw,56px) 0 0; position:relative; }
-  #galTrack{ display:flex; gap:clamp(10px,1.4vw,18px); overflow-x:auto; cursor:grab; padding:0 clamp(14px,2vw,24px); scroll-padding:0 clamp(14px,2vw,24px); -webkit-overflow-scrolling:touch; scrollbar-width:none; outline:none; }
-  #galTrack::-webkit-scrollbar{ display:none; }
-  .gal-slide{ flex:none; height:clamp(220px,56vh,620px); aspect-ratio:2200/1338; border-radius:14px; overflow:hidden; background:rgba(237,233,224,0.06); position:relative; }
-  .gal-slide img{ width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none; }
-  .gal-arrow{ position:absolute; top:calc(50% - 20px); width:44px; height:44px; border-radius:50%; border:1px solid rgba(237,233,224,0.35); background:rgba(57,47,43,0.72); backdrop-filter:blur(6px); color:var(--on-ink); font-family:inherit; font-size:22px; line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; z-index:2; transition:background .2s, opacity .2s; }
-  .gal-arrow:hover{ background:rgba(57,47,43,0.95); }
-  .gal-arrow[disabled]{ opacity:0; pointer-events:none; }
-  #galPrev{ left:clamp(18px,2.6vw,34px); } #galNext{ right:clamp(18px,2.6vw,34px); }
-  #galDots{ display:flex; justify-content:center; align-items:center; gap:8px; padding:14px 0 2px; }
-  .gal-dot{ width:7px; height:7px; border-radius:50%; border:none; padding:0; background:rgba(211,201,191,0.22); cursor:pointer; transition:all .25s; }
-  .gal-dot.on{ background:rgba(211,201,191,0.6); width:22px; border-radius:4px; }
+  /* ---- Recorridos superiores: dos tarjetas lado a lado, la animación avanza con el cursor ---- */
+  #tour{ background:var(--ink); color:var(--on-ink); padding:clamp(16px,2vw,32px) clamp(16px,2vw,24px) 0; }
+  .tr-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(10px,1.4vw,20px); }
+  .tr-card{ position:relative; aspect-ratio:1.6; max-width:100%; border-radius:14px; overflow:hidden; background:#2A221F; isolation:isolate; cursor:ew-resize; touch-action:pan-y; outline:none; }
+  .tr-card:focus-visible{ outline:2px solid var(--on-ink); outline-offset:3px; }
+  .tr-card canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; transition:transform 1.2s cubic-bezier(.2,.8,.2,1); }
+  .tr-card:hover canvas{ transform:scale(1.025); }
+  .tr-card::after{ content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(to top, rgba(26,20,17,.8) 0%, rgba(26,20,17,0) 52%); }
+  .tr-tx{ position:absolute; z-index:2; left:clamp(16px,2.2vw,30px); right:clamp(16px,2.2vw,30px); bottom:clamp(14px,2vw,26px); pointer-events:none; }
+  .tr-tx .no{ display:block; font-size:11px; font-weight:700; letter-spacing:.14em; color:var(--on-ink-muted); font-variant-numeric:tabular-nums; margin-bottom:4px; }
+  .tr-tx h2{ margin:0; font-size:clamp(17px,1.9vw,28px); font-weight:700; line-height:1.05; letter-spacing:-.01em; max-width:14ch; text-wrap:balance; }
+  .tr-tx p{ margin:10px 0 0; font-size:clamp(10px,.8vw,12px); font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--on-ink-muted); }
+  .tr-st{ position:absolute; z-index:2; top:14px; right:14px; max-width:calc(100% - 150px); font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:rgba(26,20,17,.55); backdrop-filter:blur(6px); padding:7px 12px; border-radius:999px; pointer-events:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tr-bar{ position:absolute; z-index:2; left:0; right:0; bottom:0; height:2px; background:rgba(237,233,224,0.2); pointer-events:none; }
+  .tr-bar i{ display:block; height:100%; background:var(--on-ink); transform-origin:left; transform:scaleX(0); }
   @media (max-width:700px){
-    .gal-slide{ height:auto; width:84vw; aspect-ratio:2200/1338; border-radius:10px; }
-    .gal-arrow{ display:none; }
+    .tr-grid{ grid-template-columns:1fr; }
+    .tr-card{ aspect-ratio:1.5; border-radius:10px; }
   }
+  @media (prefers-reduced-motion: reduce){ .tr-card canvas{ transition:none; } .tr-card:hover canvas{ transform:none; } }
 
   /* Formación: misma grilla que Formación continua; el Máster ocupa 2 columnas y Arquitecto se alinea con la 3ª */
   @media (min-width: 1280px){
@@ -85,27 +88,79 @@
   /* Botones de contacto en el pie (WhatsApp / LinkedIn) */
   .foot-social{ width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(237,233,224,0.35); color:var(--on-ink); transition:background .2s, color .2s, border-color .2s; }
   .foot-social:hover, .foot-social:focus-visible{ background:var(--on-ink); color:var(--ink); border-color:var(--on-ink); outline:none; }
+
+  /* Ventana de acceso al portafolio (contraseña / solicitud) */
+  .lk-card{ width:min(400px,100%); max-height:100%; overflow:auto; background:var(--on-ink); color:var(--ink); border-radius:21.6px; padding:30px 28px 24px; box-shadow:0 20px 60px rgba(0,0,0,.3); box-sizing:border-box; }
+  .lk-view{ display:flex; flex-direction:column; font-family:inherit; }
+  .lk-view[hidden]{ display:none; }
+  .lk-eyebrow{ font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; opacity:.62; margin-bottom:10px; }
+  .lk-title{ font-size:21.6px; font-weight:800; margin-bottom:6px; }
+  .lk-text{ font-size:14.4px; line-height:1.5; opacity:.75; margin-bottom:16px; }
+  .lk-small{ font-size:13px; margin:14px 0 4px; }
+  .lk-sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }
+  .lk-label{ font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; opacity:.62; margin:10px 0 6px 4px; }
+  .lk-input{ width:100%; box-sizing:border-box; font:inherit; font-size:15.6px; padding:12px 16px; border-radius:999px; border:1px solid rgba(57,47,43,.3); background:#fff; color:var(--ink); outline-color:var(--ink); }
+  .lk-msg{ min-height:20px; font-size:13px; color:#9b3b2b; margin:8px 4px 6px; }
+  .lk-actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:6px; }
+  .lk-btn{ cursor:pointer; font:inherit; font-size:14.4px; font-weight:600; padding:11px 22px; border-radius:999px; border:1px solid rgba(57,47,43,.3) !important; background:transparent; color:var(--ink) !important; text-align:center; text-decoration:none; }
+  .lk-primary{ background:var(--ink); color:var(--on-ink) !important; border-color:var(--ink) !important; }
+  .lk-send{ display:flex; flex-direction:column; gap:10px; }
+  .lk-switch{ margin-top:18px; padding-top:14px; border-top:1px solid rgba(57,47,43,.14); font-size:13.8px; opacity:.85; text-align:center; }
+  .lk-link{ all:unset; cursor:pointer; font-weight:700; text-decoration:underline; text-underline-offset:3px; }
+  .lk-link:focus-visible, .lk-btn:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+
+  /* Descargar CV en el pie: texto + ícono circular igual a WhatsApp / LinkedIn */
+  .foot-cv{ display:inline-flex; align-items:center; gap:12px; color:var(--on-ink); font-weight:700; letter-spacing:.02em; border-bottom:none; }
+  .foot-cv:hover, .foot-cv:focus-visible{ color:var(--on-ink); outline:none; }
+  .foot-cv:hover .foot-social, .foot-cv:focus-visible .foot-social{ background:var(--on-ink); color:var(--ink); border-color:var(--on-ink); }
+  @media (max-width:700px){ .foot-cv{ font-size:13px; } }
+
+  /* Etiqueta BIM en la esquina superior izquierda de cada recorrido */
+  .tr-bim{ position:absolute; z-index:2; top:14px; left:14px; display:inline-flex; align-items:center; gap:7px; font-size:10.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--on-ink); background:rgba(26,20,17,.45); backdrop-filter:blur(6px); padding:6px 11px; border-radius:999px; pointer-events:none; opacity:.9; }
+  .tr-bim i{ width:6px; height:6px; border-radius:50%; background:var(--paper); }
+
+  /* Indicación elegante: cursor que se desliza a los lados; desaparece al usar la animación */
+  .tr-hint{ position:absolute; z-index:2; left:50%; top:46%; width:92px; height:92px; margin:-46px 0 0 -46px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--on-ink); background:rgba(26,20,17,.32); backdrop-filter:blur(6px); border:1px solid rgba(237,233,224,.28); pointer-events:none; transition:opacity .5s ease, transform .5s ease; }
+  .tr-hint svg{ width:52px; height:34px; }
+  .tr-hint-cur{ animation:trDesliza 2.6s ease-in-out infinite; transform-box:fill-box; }
+  .tr-hint-arr{ opacity:.55; }
+  @keyframes trDesliza{ 0%,100%{ transform:translateX(-11px); } 50%{ transform:translateX(11px); } }
+  .tr-card.usado .tr-hint, .tr-card:hover .tr-hint{ opacity:0; transform:scale(.92); }
+  @media (prefers-reduced-motion: reduce){ .tr-hint-cur{ animation:none; } }
+
+  /* Línea de tiempo: zoom editable, notas abajo a la izquierda */
+  .tl-zoominput{ width:52px; min-width:0 !important; box-sizing:border-box; font:inherit; font-size:13.2px; color:var(--on-ink-muted); text-align:center; background:transparent; border:1px solid transparent; border-radius:999px; padding:4px 2px; cursor:text; }
+  .tl-zoominput:hover{ border-color:rgba(237,233,224,0.28); }
+  .tl-zoominput:focus{ outline:none; color:var(--on-ink); border-color:var(--on-ink); background:rgba(237,233,224,0.06); }
+  .tl-notes{ position:absolute; left:20px; bottom:16px; z-index:2; display:flex; flex-direction:column; gap:6px; max-width:calc(100% - 40px); font-size:12.6px; line-height:1.45; color:var(--on-ink-muted); background:rgba(57,47,43,0.78); backdrop-filter:blur(6px); padding:10px 14px; border-radius:12px; pointer-events:none; }
+  .tl-notes-line{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  @media (max-width:700px){ .tl-title-sub{ display:none; } .tl-zoominput{ width:40px; font-size:10.8px !important; } .tl-notes{ font-size:11px; left:10px; bottom:10px; } }
 </style>
 </head>
 <body>
 
 <div style="width:100%; box-sizing:border-box; background:var(--paper); color:var(--ink); font-family:'Urbanist',ui-sans-serif,system-ui,sans-serif;">
 
-  <!-- ============ GALERÍA SUPERIOR ============ -->
-  <section id="galStrip" aria-label="Galería de imágenes">
-    <div style="position:relative;">
-      <div id="galTrack" tabindex="0">
-        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-1.jpg" alt="Render 1" draggable="false"></figure>
-        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-2.jpg" alt="Render 2" draggable="false" loading="lazy"></figure>
-        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-3.jpg" alt="Render 3" draggable="false" loading="lazy"></figure>
-        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-4.jpg" alt="Render 4" draggable="false" loading="lazy"></figure>
-        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-5.jpg" alt="Render 5" draggable="false" loading="lazy"></figure>
-        <figure class="gal-slide" style="margin:0;"><img src="galeria/encuadre-6.jpg" alt="Render 6" draggable="false" loading="lazy"></figure>
+  <!-- ============ RECORRIDOS SUPERIORES ============ -->
+  <section id="tour" aria-label="Recorridos de proyectos">
+    <div class="tr-grid">
+      <div class="tr-card" data-k="0" tabindex="0" role="group" aria-label="Vivienda Puerto Prat: mueve el cursor o usa las flechas para avanzar la animación">
+        <canvas aria-hidden="true"></canvas>
+        <span class="tr-bim" title="Proyecto desarrollado con metodología BIM en Revit"><i aria-hidden="true"></i>BIM · Revit</span>
+        <span class="tr-st">Mueve el cursor</span>
+        <span class="tr-hint" aria-hidden="true"><svg viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="tr-hint-arr" d="M8 32h48M14 27l-6 5 6 5M50 27l6 5-6 5"/><path class="tr-hint-cur" d="M28 4v17l4.2-4 3.3 7.2 2.6-1.2-3.3-7.1 5.8-.3z" fill="currentColor" fill-opacity=".18"/></svg></span>
+        <div class="tr-tx"><h2>Vivienda Puerto Prat</h2><p>Puerto Natales · Región de Magallanes</p></div>
+        <div class="tr-bar"><i></i></div>
       </div>
-      <button id="galPrev" class="gal-arrow" aria-label="Imagen anterior">‹</button>
-      <button id="galNext" class="gal-arrow" aria-label="Imagen siguiente">›</button>
+      <div class="tr-card" data-k="1" tabindex="0" role="group" aria-label="Habitáculo y Refugio Turístico: mueve el cursor o usa las flechas para avanzar la animación">
+        <canvas aria-hidden="true"></canvas>
+        <span class="tr-bim" title="Proyecto desarrollado con metodología BIM en Revit"><i aria-hidden="true"></i>BIM · Revit</span>
+        <span class="tr-st">Mueve el cursor</span>
+        <span class="tr-hint" aria-hidden="true"><svg viewBox="0 0 64 40" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path class="tr-hint-arr" d="M8 32h48M14 27l-6 5 6 5M50 27l6 5-6 5"/><path class="tr-hint-cur" d="M28 4v17l4.2-4 3.3 7.2 2.6-1.2-3.3-7.1 5.8-.3z" fill="currentColor" fill-opacity=".18"/></svg></span>
+        <div class="tr-tx"><h2>Habitáculo y Refugio Turístico</h2><p>Tierra del Fuego · Región de Magallanes</p></div>
+        <div class="tr-bar"><i></i></div>
+      </div>
     </div>
-    <div id="galDots"></div>
   </section>
 
   <!-- ============ HERO ============ -->
@@ -161,7 +216,7 @@
       <div class="cv-row" style="display:grid; grid-template-columns: 264px 1fr; gap:33.6px; padding:26.4px 0; border-top:1px solid var(--line);">
         <div>
           <div style="font-size:16.8px; font-weight:700;">Fundador</div>
-          <div style="font-size:15.6px; font-weight:600; color:var(--muted-strong); margin-top:3.6px;">MATERIA estudio</div>
+          <div style="font-size:15.6px; font-weight:600; color:var(--muted-strong); margin-top:3.6px;">MATERIA estudio · Independiente</div>
           <div style="font-size:14.4px; color:var(--muted); margin-top:7.2px; letter-spacing:0.02em;">04/2020 — Actualidad</div>
         </div>
         <ul style="margin:0; padding:0 0 0 21.6px; font-size:17.4px; line-height:1.65; color:var(--ink);">
@@ -310,7 +365,7 @@
   <!-- ============ FOOTER ============ -->
   <div style="width:calc(100% - 2*clamp(28.8px,6vw,57.6px)); max-width:calc(1416px - 2*clamp(28.8px,6vw,57.6px)); margin:0 auto; padding:28px 0 40px; box-sizing:border-box; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14.4px; color:var(--on-ink-muted); border-top:1px solid rgba(237,233,224,0.14);">
     <div style="display:flex; align-items:center; gap:10px;"><a class="foot-social" href="https://wa.me/56963343498" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" title="Escribir por WhatsApp"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></a><a class="foot-social" href="https://www.linkedin.com/in/albertojercicarquitecto" target="_blank" rel="noopener" aria-label="Perfil de LinkedIn" title="Perfil de LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3V9.75zm7 0h3.83v1.54h.05c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13V21h-4v-4.98c0-1.19-.02-2.72-1.66-2.72-1.66 0-1.91 1.3-1.91 2.63V21h-4V9.75z"/></svg></a><span style="margin-left:6px;">Arq. Alberto Jercic Martinic</span></div>
-    <div id="fechaActualizado">Actualizado 10/2026</div>
+    <a class="foot-cv" href="cv/CV-Arq-Alberto-Jercic-Martinic.pdf" download="CV Arq. Alberto Jercic Martinic.pdf" target="_blank" rel="noopener"><span>Descargar CV versión PDF</span><span class="foot-social" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg></span></a>
   </div>
   </div>
 
@@ -365,11 +420,11 @@
 
       <!-- title bar -->
       <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(237,233,224,0.05); border-bottom:1px solid rgba(237,233,224,0.14); position:relative;">
-        <div class="tl-title" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:15.6px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Línea de tiempo de proyectos</div>
+        <div class="tl-title" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:15.6px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Línea de tiempo de proyectos<span class="tl-title-sub"> · Arq. Alberto Jercic Martinic</span></div>
         <div class="tl-controls" style="margin-left:auto; display:flex; align-items:center; gap:9.6px;">
           <div id="projectTotalLabel" class="tl-total" style="font-size:13.2px; color:var(--on-ink-muted); margin-right:9.6px; white-space:nowrap;"></div>
           <button id="btnZoomOut" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.8px; line-height:1;">−</button>
-          <div id="zoomLabel" class="tl-zoomlabel" style="font-size:13.2px; color:var(--on-ink-muted); min-width:42px; text-align:center;"></div>
+          <input id="zoomLabel" class="tl-zoomlabel tl-zoominput" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Zoom en porcentaje. Escribe un número y presiona Enter" title="Escribe un porcentaje y presiona Enter">
           <button id="btnZoomIn" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.8px; line-height:1;">+</button>
           <button id="btnReset" style="cursor:pointer; font-family:inherit; border-radius:999px; padding:6px 14.4px; font-size:12.6px; font-weight:600; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); margin-left:4.8px; white-space:nowrap;">Centrar</button>
           <button id="btnClose" title="Cerrar" aria-label="Cerrar" class="tl-closebtn" style="cursor:pointer; font-family:inherit; width:30px; height:30px; border-radius:50%; border:none; background:#FFFFFF; color:var(--ink); display:flex; align-items:center; justify-content:center; margin-left:9.6px; padding:0; flex:none;">
@@ -378,20 +433,18 @@
         </div>
       </div>
 
-      <!-- subtitle -->
-      <div style="flex:none; padding:14.4px 24px 0; font-size:13.8px; color:var(--on-ink-muted); max-width:816px; line-height:1.5;">Arrastra para moverte y usa el scroll (o pellizca con dos dedos en el celular) o los botones −/+ para hacer zoom.</div>
-
-      <!-- legend: BIM marker -->
-      <div class="tl-bim-legend" style="flex:none; padding:8.4px 24px 0; display:flex; align-items:center;">
-        <span style="position:relative; width:9.2px; height:9.2px; border-radius:50%; background:var(--on-ink); flex:none;"></span>
-        <span style="margin-left:7.5px; font-size:9.6px; font-weight:800; letter-spacing:0.02em; color:var(--on-ink); line-height:1;">BIM</span>
-        <span style="margin-left:9.6px; font-size:13.8px; color:var(--on-ink-muted); line-height:1;">= proyecto desarrollado bajo metodología BIM</span>
-      </div>
-
       <!-- pannable / zoomable viewport -->
       <div id="viewport" style="flex:1; min-height:0; position:relative; overflow:hidden; cursor:grab; background:var(--ink); user-select:none; display:flex; align-items:center; justify-content:center; touch-action:none;">
         <div id="pannable" style="transform:translate(0px,0px) scale(0.55); transform-origin:center center;">
           <div id="timelineContent" style="display:flex; flex-direction:column; padding:32px 0 0 40px;"></div>
+        </div>
+        <div class="tl-notes" aria-label="Indicaciones">
+          <div class="tl-bim-legend" style="display:flex; align-items:center;">
+            <span style="width:9.2px; height:9.2px; border-radius:50%; background:var(--on-ink); flex:none;"></span>
+            <span style="margin-left:7.5px; font-size:9.6px; font-weight:800; letter-spacing:0.02em; color:var(--on-ink); line-height:1;">BIM</span>
+            <span style="margin-left:9.6px;">= proyecto desarrollado bajo metodología BIM</span>
+          </div>
+          <div class="tl-notes-line">Arrastra para moverte · usa el scroll, pellizca en el celular, los botones −/+ o escribe el % de zoom.</div>
         </div>
       </div>
 
@@ -402,18 +455,53 @@
 </div>
 
 <div id="pfLock" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(20,16,14,0.55); align-items:center; justify-content:center; padding:16px;">
-  <form id="pfLockForm" style="width:min(380px,100%); background:var(--on-ink); color:var(--ink); border-radius:21.6px; padding:30px 28px 26px; box-shadow:0 20px 60px rgba(0,0,0,.3); font-family:inherit;">
-    <div style="font-size:12px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; opacity:.62; margin-bottom:10px;">Acceso privado</div>
-    <div style="font-size:21.6px; font-weight:800; margin-bottom:6px;">Portafolio</div>
-    <div style="font-size:14.4px; line-height:1.5; opacity:.75; margin-bottom:18px;">Ingresa la contraseña para ver el portafolio.</div>
-    <label for="pfLockInput" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);">Contraseña</label>
-    <input id="pfLockInput" type="password" autocomplete="current-password" placeholder="Contraseña" style="width:100%; box-sizing:border-box; font:inherit; font-size:15.6px; padding:12px 16px; border-radius:999px; border:1px solid rgba(57,47,43,.3); background:#fff; color:var(--ink); outline-color:var(--ink);">
-    <div id="pfLockMsg" aria-live="polite" style="min-height:20px; font-size:13px; color:#9b3b2b; margin:8px 4px 6px;"></div>
-    <div style="display:flex; gap:10px; justify-content:flex-end;">
-      <button type="button" id="pfLockCancel" style="cursor:pointer; font:inherit; font-size:14.4px; font-weight:600; padding:11px 22px; border-radius:999px; border:1px solid rgba(57,47,43,.3); background:transparent; color:var(--ink);">Cancelar</button>
-      <button type="submit" style="cursor:pointer; font:inherit; font-size:14.4px; font-weight:600; padding:11px 26px; border-radius:999px; border:1px solid var(--ink); background:var(--ink); color:var(--on-ink);">Entrar</button>
+  <div class="lk-card">
+    <!-- Vista 1: contraseña -->
+    <form id="pfLockForm" class="lk-view">
+      <div class="lk-eyebrow">Acceso privado</div>
+      <div class="lk-title">Portafolio</div>
+      <div class="lk-text">Ingresa la contraseña para ver el portafolio.</div>
+      <label for="pfLockInput" class="lk-sr">Contraseña</label>
+      <input id="pfLockInput" class="lk-input" type="password" autocomplete="current-password" placeholder="Contraseña">
+      <div id="pfLockMsg" class="lk-msg" aria-live="polite"></div>
+      <div class="lk-actions">
+        <button type="button" id="pfLockCancel" class="lk-btn">Cancelar</button>
+        <button type="submit" class="lk-btn lk-primary">Entrar</button>
+      </div>
+      <div class="lk-switch">¿No tienes la contraseña? <button type="button" id="pfToReq" class="lk-link">Solicitar acceso</button></div>
+    </form>
+
+    <!-- Vista 2: solicitud de acceso -->
+    <form id="pfReqForm" class="lk-view" hidden novalidate>
+      <div class="lk-eyebrow">Solicitar acceso</div>
+      <div class="lk-title">Portafolio</div>
+      <div class="lk-text">Déjame tus datos y te envío la contraseña.</div>
+      <label for="pfReqNombre" class="lk-label">Nombre</label>
+      <input id="pfReqNombre" class="lk-input" type="text" autocomplete="name" placeholder="Tu nombre">
+      <label for="pfReqEmpresa" class="lk-label">Empresa</label>
+      <input id="pfReqEmpresa" class="lk-input" type="text" autocomplete="organization" placeholder="Empresa u oficina">
+      <label for="pfReqCorreo" class="lk-label">Correo</label>
+      <input id="pfReqCorreo" class="lk-input" type="email" autocomplete="email" placeholder="nombre@empresa.cl">
+      <div id="pfReqMsg" class="lk-msg" aria-live="polite"></div>
+      <div class="lk-actions">
+        <button type="button" id="pfReqBack" class="lk-btn">Volver</button>
+        <button type="submit" class="lk-btn lk-primary">Continuar</button>
+      </div>
+    </form>
+
+    <!-- Vista 3: elegir cómo enviar -->
+    <div id="pfReqSend" class="lk-view" hidden>
+      <div class="lk-eyebrow">Solicitar acceso</div>
+      <div class="lk-title">Envía tu solicitud</div>
+      <div class="lk-text">Elige cómo enviarla. Se abrirá con tus datos ya escritos; solo tienes que presionar enviar.</div>
+      <div class="lk-send">
+        <a id="pfSendMail" class="lk-btn lk-primary" href="#" target="_blank" rel="noopener">Enviar por correo</a>
+        <a id="pfSendWa" class="lk-btn" href="#" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+      </div>
+      <div class="lk-text lk-small">También puedes escribir directamente a <span style="user-select:all;">alberto.jercic@gmail.com</span></div>
+      <div class="lk-actions"><button type="button" id="pfSendClose" class="lk-btn">Cerrar</button></div>
     </div>
-  </form>
+  </div>
 </div>
 <script>
 const PROJECTS = [
@@ -896,7 +984,7 @@ const zoomLabelEl = document.getElementById('zoomLabel');
 function updateTransform() {
   pannable.style.transform = 'translate(' + state.panX + 'px,' + state.panY + 'px) scale(' + state.zoom + ')';
   viewport.style.cursor = state.dragging ? 'grabbing' : 'grab';
-  zoomLabelEl.textContent = Math.round(state.zoom * 100) + '%';
+  if (document.activeElement !== zoomLabelEl) zoomLabelEl.value = Math.round(state.zoom * 100) + '%';
 }
 
 function fitView() {
@@ -1065,6 +1153,38 @@ document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pf
 document.getElementById('btnPortfolio').addEventListener('click', function () {
   if (pfUnlocked()) openPortfolio(); else openPfLock();
 });
+
+// Solicitud de acceso al portafolio: arma un mensaje con nombre, empresa y correo
+(function () {
+  var views = { pass: document.getElementById('pfLockForm'), req: document.getElementById('pfReqForm'), send: document.getElementById('pfReqSend') };
+  function show(v) {
+    Object.keys(views).forEach(function (k) { views[k].hidden = (k !== v); });
+    var f = views[v].querySelector('input, a, button');
+    if (f) setTimeout(function () { f.focus(); }, 30);
+  }
+  document.getElementById('pfToReq').addEventListener('click', function () { show('req'); });
+  document.getElementById('pfReqBack').addEventListener('click', function () { show('pass'); });
+  document.getElementById('pfSendClose').addEventListener('click', function () { document.getElementById('pfLock').style.display = 'none'; show('pass'); });
+  views.req.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nombre = document.getElementById('pfReqNombre').value.trim();
+    var empresa = document.getElementById('pfReqEmpresa').value.trim();
+    var correo = document.getElementById('pfReqCorreo').value.trim();
+    var msg = document.getElementById('pfReqMsg');
+    if (!nombre || !empresa || !correo) { msg.textContent = 'Completa nombre, empresa y correo.'; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) { msg.textContent = 'Revisa el correo: parece incompleto.'; return; }
+    msg.textContent = '';
+    var texto = 'Hola Alberto, quisiera acceso a tu portafolio.\n\nNombre: ' + nombre + '\nEmpresa: ' + empresa + '\nCorreo: ' + correo;
+    document.getElementById('pfSendMail').href = 'mailto:alberto.jercic@gmail.com?subject=' + encodeURIComponent('Solicitud de acceso al portafolio - ' + empresa) + '&body=' + encodeURIComponent(texto);
+    document.getElementById('pfSendWa').href = 'https://wa.me/56963343498?text=' + encodeURIComponent(texto);
+    show('send');
+  });
+  // al abrir la ventana siempre parte en la vista de contraseña
+  document.getElementById('btnPortfolio').addEventListener('click', function () {
+    if (document.getElementById('pfLock').style.display === 'flex') show('pass');
+  });
+})();
+
 document.getElementById('btnPortfolioClose').addEventListener('click', closePortfolio);
 document.getElementById('pfPrev').addEventListener('click', function () {
   if (pfLoaded && pfPageNum > 1) { pfPageNum--; renderPfPage(); }
@@ -1126,6 +1246,20 @@ document.getElementById('btnZoomOut').addEventListener('click', function () {
   updateTransform();
 });
 document.getElementById('btnReset').addEventListener('click', fitView);
+
+// Zoom escrito a mano: por ejemplo 55 → 55 %
+function applyTypedZoom() {
+  const n = parseFloat(String(zoomLabelEl.value).replace(',', '.').replace(/[^0-9.]/g, ''));
+  if (!isNaN(n) && n > 0) state.zoom = Math.min(2.2, Math.max(0.08, n / 100));
+  zoomLabelEl.blur();
+  updateTransform();
+}
+zoomLabelEl.addEventListener('focus', function () { zoomLabelEl.value = String(Math.round(state.zoom * 100)); zoomLabelEl.select(); });
+zoomLabelEl.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') { e.preventDefault(); applyTypedZoom(); }
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); zoomLabelEl.blur(); updateTransform(); }
+});
+zoomLabelEl.addEventListener('blur', function () { if (zoomLabelEl.value.indexOf('%') < 0) applyTypedZoom(); });
 
 overlay.addEventListener('wheel', function (e) { e.preventDefault(); }, { passive: false });
 
@@ -1233,51 +1367,94 @@ window.addEventListener('keydown', function (e) {
 updateTransform();
 </script>
 <script>
+/* Recorridos superiores: dos tarjetas; la posición horizontal del cursor (o del dedo) avanza cada animación. */
 (function(){
-  var track=document.getElementById('galTrack'); if(!track) return;
-  var slides=[].slice.call(track.querySelectorAll('.gal-slide'));
-  var prev=document.getElementById('galPrev'), next=document.getElementById('galNext'), dotsEl=document.getElementById('galDots');
-  var dots=slides.map(function(_,i){ var b=document.createElement('button'); b.className='gal-dot'; b.setAttribute('aria-label','Ir a imagen '+(i+1)); b.addEventListener('click',function(){ go(i); }); dotsEl.appendChild(b); return b; });
-  function cur(){ var x=track.scrollLeft+8, best=0; slides.forEach(function(sl,i){ if(sl.offsetLeft-track.offsetLeft<=x+ (parseFloat(getComputedStyle(track).paddingLeft)||0)) best=i; }); if(track.scrollLeft+track.clientWidth>=track.scrollWidth-4) best=slides.length-1; return best; }
-  function go(i){ i=Math.max(0,Math.min(slides.length-1,i)); track.scrollTo({left:slides[i].offsetLeft-track.offsetLeft-(parseFloat(getComputedStyle(track).paddingLeft)||0), behavior:'smooth'}); }
-  function upd(){ var c=cur(); dots.forEach(function(d,i){ d.classList.toggle('on',i===c); }); prev.disabled=track.scrollLeft<=4; next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-4; }
-  // flechas: buscan la imagen anterior/siguiente según la posición real (sirve aunque esté al final o entre dos imágenes)
-  function pos(i){ return slides[i].offsetLeft-track.offsetLeft-(parseFloat(getComputedStyle(track).paddingLeft)||0); }
-  function stopGlide(){ if(typeof raf!=='undefined' && raf){ cancelAnimationFrame(raf); raf=0; } }
-  function goPrev(){ stopGlide(); var x=track.scrollLeft, max=track.scrollWidth-track.clientWidth; if(x>=max-4){ for(var i=slides.length-1;i>=0;i--){ if(pos(i)<max-4){ go(i); return; } } } for(var j=slides.length-1;j>=0;j--){ if(pos(j)<x-4){ go(j); return; } } go(0); }
-  function goNext(){ stopGlide(); var x=track.scrollLeft; for(var i=0;i<slides.length;i++){ if(pos(i)>x+4){ go(i); return; } } go(slides.length-1); }
-  prev.addEventListener('click',goPrev);
-  next.addEventListener('click',goNext);
-  track.addEventListener('scroll',function(){ window.requestAnimationFrame(upd); },{passive:true});
-  track.addEventListener('keydown',function(e){ if(e.key==='ArrowRight'){ e.preventDefault(); goNext();} if(e.key==='ArrowLeft'){ e.preventDefault(); goPrev();} });
-  window.addEventListener('resize',upd);
-  // arrastre con mouse en escritorio
-  // arrastre libre con inercia (mouse): al soltar, la galería sigue deslizándose y frena suavemente
-  var down=false,sx=0,sl0=0,moved=false,vel=0,raf=0,muestras=[];
-  function glide(){
-    vel*=0.94;                                   // fricción: más cerca de 1 = desliza más lejos
-    if(Math.abs(vel)<0.02){ raf=0; return; }
-    var antes=track.scrollLeft; track.scrollLeft-=vel*16;
-    if(track.scrollLeft===antes){ raf=0; return; } // llegó al borde
-    raf=requestAnimationFrame(glide);
+  var tour=document.getElementById('tour'); if(!tour) return;
+  var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var coarse=window.matchMedia && matchMedia('(pointer: coarse)').matches;
+  function pad(i){ return ('00'+i).slice(-3); }
+  var SETS=[
+    { n:44, idle:0, src:function(i){ return 'p/'+pad(i)+'.jpg'; },
+      marks:[[0,'Terreno y trazado'],[.031,'Fundaciones y pilares'],[.085,'Entramado de piso'],[.224,'Plataforma de piso SIP'],[.347,'Pórticos de acero'],[.51,'Muros y tabiques SIP'],[.618,'Estructura de techumbre'],[.772,'Cubierta de acero'],[.849,'Revestimiento exterior'],[.934,'Terminaciones']] },
+    // Habitáculo: uno de cada dos cuadros (145) y sin fundido, para que la cámara en movimiento no deje doble imagen.
+    { n:145, idle:0, snap:true, src:function(i){ return 'habitaculo/frames/Recorrido'+pad(i*2)+'.webp'; },
+      marks:[[0,'Exterior'],[.16,'Fachada'],[.36,'Estar'],[.56,'Patio central'],[.76,'Comedor'],[.92,'Anochecer']] }
+  ];
+  var dirty=true, hintText=coarse ? 'Desliza sobre la imagen' : 'Mueve el cursor';
+  function nearest(arr,i){
+    for(var d=0; d<arr.length; d++){
+      var a=arr[i-d], b=arr[i+d];
+      if(a && a.complete && a.naturalWidth) return a;
+      if(b && b.complete && b.naturalWidth) return b;
+    }
+    return null;
   }
-  track.addEventListener('dragstart',function(e){ e.preventDefault(); });
-  track.addEventListener('click',function(e){ if(moved){ e.preventDefault(); e.stopPropagation(); } },true);
-  track.addEventListener('mousedown',function(e){ if(e.button!==0) return; cancelAnimationFrame(raf); raf=0; down=true; moved=false; sx=e.pageX; sl0=track.scrollLeft; muestras=[{x:e.pageX,t:performance.now()}]; track.style.cursor='grabbing'; });
-  window.addEventListener('mousemove',function(e){ if(!down) return; var dx=e.pageX-sx; if(Math.abs(dx)>3) moved=true; track.scrollLeft=sl0-dx; var t=performance.now(); muestras.push({x:e.pageX,t:t}); while(muestras.length>2 && t-muestras[0].t>100) muestras.shift(); });
-  window.addEventListener('mouseup',function(){
-    if(!down) return; down=false; track.style.cursor='';
-    var t=performance.now(); if(!moved || muestras.length<2 || t-muestras[muestras.length-1].t>120) return;
-    var a=muestras[0], b=muestras[muestras.length-1]; vel=(b.x-a.x)/Math.max(16,b.t-a.t)*1.2;
-    vel=Math.max(-6,Math.min(6,vel)); if(!raf) raf=requestAnimationFrame(glide);
+  var cards=[].slice.call(tour.querySelectorAll('.tr-card')).map(function(el){
+    var s=SETS[+el.getAttribute('data-k')];
+    var c={ el:el, s:s, cv:el.querySelector('canvas'), st:el.querySelector('.tr-st'), bar:el.querySelector('.tr-bar i'), pos:s.idle, tgt:s.idle, active:false, drawn:-1, label:'' };
+    c.ctx=c.cv.getContext('2d'); c.st.textContent=hintText;
+    // Carga progresiva: primero el cuadro en reposo y cuadros salteados, luego el resto.
+    s.imgs=new Array(s.n); var order=[s.idle], seen={}; seen[s.idle]=1;
+    [16,8,4,2,1].forEach(function(step){ for(var i=0;i<s.n;i+=step){ if(!seen[i]){ seen[i]=1; order.push(i); } } });
+    order.forEach(function(i){ var im=new Image(); im.decoding='async'; im.onload=function(){ dirty=true; }; im.src=s.src(i); s.imgs[i]=im; });
+    // Control relativo: la animación avanza o retrocede según cuánto se mueve el cursor, sin saltar al entrar.
+    var lastX=null;
+    // Zona sensible con margen: el 12% de cada borde no mueve la animación, y recorrer la zona central completa = animación completa.
+    var MARGEN=0.12;
+    function zx(e){ var r=el.getBoundingClientRect(), m=r.width*MARGEN; return Math.max(r.left+m,Math.min(r.right-m,e.clientX)); }
+    function mover(e){ var w=(el.getBoundingClientRect().width||1)*(1-2*MARGEN), x=zx(e); if(lastX!==null){ c.tgt=Math.max(0,Math.min(s.n-1,c.tgt+(x-lastX)/w*(s.n-1))); } lastX=x; c.active=true; c.used=true; }
+    el.addEventListener('pointerenter',function(e){ lastX=zx(e); });
+    el.addEventListener('pointerdown',function(e){ lastX=zx(e); });
+    el.addEventListener('pointermove',mover);
+    // Con mouse, al salir vuelve al cuadro de reposo; con el dedo se queda donde lo dejaste.
+    el.addEventListener('pointerleave',function(){ lastX=null; c.active=false; }); // queda en el cuadro donde se dejó
+    el.addEventListener('keydown',function(e){
+      var d=e.key==='ArrowRight' ? 1 : e.key==='ArrowLeft' ? -1 : 0; if(!d) return;
+      e.preventDefault(); c.active=true; c.used=true; c.tgt=Math.max(0,Math.min(s.n-1,Math.round(c.tgt)+d*2));
+    });
+    el.addEventListener('blur',function(){ c.active=false; });
+    return c;
   });
-  upd();
+  function size(c){
+    var dpr=Math.min(window.devicePixelRatio||1,2), w=Math.round(c.cv.clientWidth*dpr), h=Math.round(c.cv.clientHeight*dpr);
+    if(w && h && (c.cv.width!==w || c.cv.height!==h)){ c.cv.width=w; c.cv.height=h; return true; } return false;
+  }
+  // Dibuja la posición t (0 a n-1, con decimales) fundiendo dos cuadros vecinos.
+  function paint(c,t){
+    var s=c.s, cv=c.cv, ctx=c.ctx; t=Math.max(0,Math.min(s.n-1,t));
+    if(s.snap) t=Math.round(t);
+    var a=Math.floor(t), f=t-a, A=nearest(s.imgs,a), B=f>0.001 ? nearest(s.imgs,Math.min(a+1,s.n-1)) : null;
+    if(!A) return;
+    function put(im,alpha){ var k=Math.max(cv.width/im.naturalWidth, cv.height/im.naturalHeight), w=im.naturalWidth*k, h=im.naturalHeight*k; ctx.globalAlpha=alpha; ctx.drawImage(im,(cv.width-w)/2,(cv.height-h)/2,w,h); }
+    ctx.globalAlpha=1; ctx.fillStyle='#2A221F'; ctx.fillRect(0,0,cv.width,cv.height);
+    put(A,1); if(B && B!==A) put(B,f); ctx.globalAlpha=1;
+  }
+  var last=performance.now();
+  function frame(now){
+    var dt=Math.min(0.05,(now-last)/1000); last=now;
+    var r=tour.getBoundingClientRect();
+    if(r.bottom>-100 && r.top<window.innerHeight+100){
+      cards.forEach(function(c){
+        var resized=size(c), d=c.tgt-c.pos;
+        if(Math.abs(d)>0.005) c.pos+=d*(reduce ? 1 : Math.min(1,dt*(c.active ? 9 : 5))); else c.pos=c.tgt;
+        if(resized || dirty || c.pos!==c.drawn){
+          paint(c,c.pos); c.drawn=c.pos;
+          var p=c.pos/(c.s.n-1), si=0; for(var i=0;i<c.s.marks.length;i++) if(p>=c.s.marks[i][0]) si=i;
+          var enCurso=c.pos>0.05; // al volver al inicio se muestra otra vez la indicación
+          var label=enCurso ? ('0'+(si+1)).slice(-2)+' · '+c.s.marks[si][1] : hintText;
+          if(label!==c.label){ c.label=label; c.st.textContent=label; }
+          c.el.classList.toggle('usado', enCurso);
+          c.bar.style.transform='scaleX('+(enCurso ? p.toFixed(4) : 0)+')';
+        }
+      });
+      dirty=false;
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize',function(){ dirty=true; });
+  requestAnimationFrame(frame);
 })();
 </script>
 
-<script>
-// Fecha de actualización automática: usa la fecha en que se publicó la página (GitHub Pages la informa)
-(function(){ var el=document.getElementById('fechaActualizado'); if(!el) return; var d=new Date(document.lastModified); if(isNaN(d)) return; el.textContent='Actualizado '+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear(); })();
-</script>
 </body>
 </html>
