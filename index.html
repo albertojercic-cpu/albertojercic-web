@@ -135,11 +135,14 @@
   .tl-notes{ position:absolute; left:20px; bottom:16px; z-index:2; display:flex; flex-direction:column; gap:6px; max-width:calc(100% - 40px); font-size:12.6px; line-height:1.45; color:var(--on-ink-muted); background:rgba(57,47,43,0.78); backdrop-filter:blur(6px); padding:10px 14px; border-radius:12px; pointer-events:none; }
   .tl-notes-line{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   @media (max-width:700px){ .tl-title-sub{ display:none; } .tl-zoominput{ width:40px; font-size:10.8px !important; } .tl-notes{ font-size:11px; left:10px; bottom:10px; } }
+
+  /* Lectura más cómoda: texto corrido en grosor medio */
+  .cv-text{ font-weight:500; }
 </style>
 </head>
 <body>
 
-<div style="width:100%; box-sizing:border-box; background:var(--paper); color:var(--ink); font-family:'Urbanist',ui-sans-serif,system-ui,sans-serif;">
+<div class="cv-text" style="width:100%; box-sizing:border-box; background:var(--paper); color:var(--ink); font-family:'Urbanist',ui-sans-serif,system-ui,sans-serif;">
 
   <!-- ============ RECORRIDOS SUPERIORES ============ -->
   <section id="tour" aria-label="Recorridos de proyectos">
