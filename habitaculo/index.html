@@ -259,13 +259,15 @@
 /* =========================================================
    CONFIGURACIÓN — edita aquí
    ========================================================= */
+// En celular se usan cuadros livianos (145, 900 px) y sin video de portada, para no exceder la memoria del teléfono
+const ES_MOVIL = matchMedia("(max-width: 820px), (pointer: coarse)").matches;
 const CONFIG = {
-  carpetaCuadros: "frames/",
+  carpetaCuadros: ES_MOVIL ? "frames-movil/" : "frames/",
   prefijo: "Recorrido",
   extension: ".webp",
-  totalCuadros: 290,
+  totalCuadros: ES_MOVIL ? 145 : 290,
   // Video de portada (opcional). Si no existe, se muestra el primer cuadro con un zoom lento.
-  videoPortada: "portada.mp4",
+  videoPortada: ES_MOVIL ? null : "portada.mp4",
   // Nombre de cada vista y en qué parte del recorrido aparece (0 = inicio, 1 = final)
   escenas: [
     { desde: 0.00, nombre: "Exterior" },
@@ -315,7 +317,7 @@ document.getElementById("lista").innerHTML = CONFIG.descargas.map((d, i) => {
   const N = CONFIG.totalCuadros;
 
   // Video de portada opcional
-  video.src = CONFIG.videoPortada;
+  if (CONFIG.videoPortada) video.src = CONFIG.videoPortada; else video.remove();
   video.addEventListener("loadeddata", () => { video.hidden = false; poster.style.opacity = 0; video.play().catch(() => {}); }, { once: true });
   video.addEventListener("error", () => video.remove(), { once: true });
 

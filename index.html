@@ -1386,7 +1386,7 @@ updateTransform();
     { n:44, idle:0, src:function(i){ return 'p/'+pad(i)+'.jpg'; },
       marks:[[0,'Terreno y trazado'],[.031,'Fundaciones y pilares'],[.085,'Entramado de piso'],[.224,'Plataforma de piso SIP'],[.347,'Pórticos de acero'],[.51,'Muros y tabiques SIP'],[.618,'Estructura de techumbre'],[.772,'Cubierta de acero'],[.849,'Revestimiento exterior'],[.934,'Terminaciones']] },
     // Habitáculo: uno de cada dos cuadros (145) y sin fundido, para que la cámara en movimiento no deje doble imagen.
-    { n:145, idle:0, snap:true, src:function(i){ return 'habitaculo/frames/Recorrido'+pad(i*2)+'.webp'; },
+    { n:145, idle:0, snap:true, src:function(i){ return coarse || window.innerWidth<=820 ? 'habitaculo/frames-movil/Recorrido'+pad(i)+'.webp' : 'habitaculo/frames/Recorrido'+pad(i*2)+'.webp'; },
       marks:[[0,'Exterior'],[.16,'Fachada'],[.36,'Estar'],[.56,'Patio central'],[.76,'Comedor'],[.92,'Anochecer']] }
   ];
   var dirty=true, hintText=coarse ? 'Desliza sobre la imagen' : 'Mueve el cursor';
