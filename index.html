@@ -139,6 +139,9 @@
 
   /* Lectura más cómoda: texto corrido en grosor medio */
   .cv-text{ font-weight:500; }
+
+  /* Celular: la descripción alineada a la izquierda para evitar espacios grandes entre palabras */
+  @media (max-width: 700px){ .bio-text{ text-align:left !important; font-size:17px !important; } }
 </style>
 </head>
 <body>
@@ -187,7 +190,7 @@
 
   <!-- ============ BIO ============ -->
   <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
-    <div style="display:flex; flex-direction:column; gap:16.8px; font-size:18.6px; line-height:1.7; color:var(--ink); text-align:justify;">
+    <div class="bio-text" style="display:flex; flex-direction:column; gap:16.8px; font-size:18.6px; line-height:1.7; color:var(--ink); text-align:justify;">
       <p style="margin:0;">Arquitecto de la <strong>Universidad de Chile</strong> (titulado con distinción máxima) y <strong>Máster en Gestión BIM</strong>, con más de <strong>7 años de trayectoria</strong> en proyectos residenciales, inmobiliarios, retail, oficinas y concursos.</p>
       <p style="margin:0; color:var(--ink);">Especializado en <strong>metodología BIM</strong> (Revit, Archicad, Dynamo, Navisworks) para documentación planimétrica, cubicaciones y <strong>coordinación de especialidades</strong> previo y durante la obra. Conecto <strong>Claude (IA) con Revit</strong> para automatizar procesos, crear familias paramétricas, auditar modelos y estructurar información IFC, integrando una visión estética y técnica con representación digital avanzada: <strong>renders hiperrealistas</strong> e <strong>inteligencia artificial generativa</strong>.</p>
     </div>
@@ -1107,6 +1110,8 @@ function closePortfolio() {
 const habOverlay = document.getElementById('habOverlay');
 const habFrame = document.getElementById('habFrame');
 function openHabitaculo(e) {
+  // En celular se abre como página normal: dentro de la ventana el recorrido con scroll no funciona bien
+  if (window.matchMedia("(max-width: 820px), (pointer: coarse)").matches) return;
   if (e) e.preventDefault();
   if (!habFrame.getAttribute('src')) habFrame.setAttribute('src', 'habitaculo/');
   document.body.style.overflow = 'hidden';

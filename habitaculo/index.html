@@ -154,6 +154,8 @@
   @media (max-width: 820px) { .rd-slide { height: auto; width: 84vw; border-radius: 10px; } .rd-arrow { display: none; } }
   @media (max-width: 820px) {
     .marco { width: calc(100vw - 32px); }
+    /* Celular vertical: marco cuadrado, más alto, para que el recorrido se vea más grande */
+    @media (orientation: portrait) { .marco { aspect-ratio: 1 / 1; } }
     footer .flujo { text-align: left; }
     .entrega-in { grid-template-columns: 1fr; }
     .marca span:last-child { display: none; }
