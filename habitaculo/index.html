@@ -217,7 +217,7 @@
 
 <section class="visor" id="visor" aria-label="Modelo Revit y visor 3D">
   <div class="visor-in">
-    <div class="visor-head"><p>Modelo Revit · Visor 3D</p><span>IFC4x3 · 8,8 MB</span></div>
+    <div class="visor-head"><p>Modelo Revit · Visor 3D</p><span>IFC2x3 · 9,4 MB</span></div>
     <div class="visor-stats">
       <div><b>236</b><span>Elementos</span></div>
       <div><b>16</b><span>Categorías</span></div>
@@ -227,7 +227,7 @@
     <div class="v3d" id="v3d">
       <div class="v3d-inicio" id="v3dInicio">
         <button type="button" class="v3d-btn" id="v3dCargar">Cargar visor 3D</button>
-        <p id="v3dTexto">Se descarga el modelo IFC4x3 (8,8 MB) y se muestra en el navegador. Arrastra para girar, usa la rueda para acercar y mantén presionada la rueda (botón central) para desplazar la vista, como en Revit.</p>
+        <p id="v3dTexto">Se descarga el modelo IFC2x3 (9,4 MB) y se muestra en el navegador. Arrastra para girar, usa la rueda para acercar y mantén presionada la rueda (botón central) para desplazar la vista, como en Revit.</p>
       </div>
     </div>
   </div>
@@ -287,7 +287,7 @@ const CONFIG = {
     { titulo: "Plan de Ejecución BIM (PEB)", desc: ["PEB-HAB-01 Rev. 09 (DOCX)","PEB-HAB-01 Rev. 09 (PDF)"], formato: "ZIP · 0.4 MB", fecha: "19/10/2026", href: "descargas/02_Plan_Ejecucion_BIM_PEB_AJercic.zip" },
     { titulo: "Parámetros Compartidos",      desc: ["Parámetros compartidos de Revit, PlanBIM_SharedParameters (TXT)","Mapeo de Psets para exportar a IFC (TXT)","Keynotes v8 (TXT)","Anexo A: elementos por categoría y entidad IFC (DOCX)","Anexo B: parámetros por categoría, 142 en NDI-1 (DOCX)","Anexo C: parámetros a ingresar (XLSX)"], formato: "ZIP · 57 KB", fecha: "19/10/2026", href: "descargas/03_Parametros_Compartidos_AJercic.zip" },
     { titulo: "Especificaciones Técnicas",   desc: ["EETT-HAB-01 Rev. 14 (DOCX)","EETT-HAB-01 Rev. 14 (PDF)","Planilla de proveedores nacionales (XLSX)"], formato: "ZIP · 0.5 MB", fecha: "19/10/2026", href: "descargas/04_Especificaciones_Tecnicas_AJercic.zip" },
-    { titulo: "Modelo Revit",                desc: "Modelo único de Arquitectura con estructura, Revit 2025 (RVT), con parámetro NDI y parámetros compartidos cargados.", formato: "Google Drive", fecha: "19/10/2026", href: "https://drive.google.com/drive/folders/1GZiWC_Ykj1X70lcta57hbqVhcUByBjAL?usp=sharing" },
+    { titulo: "Modelo Revit",                desc: "Modelo único de Arquitectura con estructura, Revit 2025 (RVT), con parámetro NDI y parámetros compartidos cargados.", formato: "Google Drive", fecha: "19/10/2026", href: "https://drive.google.com/file/d/1OrprKeWhZ5o13GG2hQeR08Ha52VQbV78/view?usp=sharing" },
     { titulo: "Planos ARQ",                  desc: ["ARQ-00 Portada (PDF)","ARQ-01 Planta de arquitectura (PDF)","ARQ-02 Planta de techo (PDF)","ARQ-03 Superficies (PDF)","ARQ-04 Elevaciones (PDF)","ARQ-05 Cortes A-A a D-D (PDF)","ARQ-06 Cortes A-A a D-D, segunda lámina (PDF)","ARQ-08 Isométricas (PDF)"], formato: "ZIP · 3.6 MB", fecha: "19/10/2026", href: "descargas/06_Planos_ARQ_AJercic.zip" },
     { titulo: "Exportación IFC",             desc: ["Modelo en IFC2x3 con NDI-1, Psets y cantidades base (IFC)","Requisitos de información PlanBIM (IDS)"], formato: "ZIP · 2.1 MB", fecha: "19/10/2026", href: "descargas/07_Exportacion_IFC_AJercic.zip" }
   ]
@@ -465,7 +465,7 @@ boton.addEventListener("click", async () => {
   boton.disabled = true; boton.textContent = "Cargando…";
   try {
     const { iniciarVisor } = await import("./visor/ifc-viewer.js");
-    const v = await iniciarVisor({ contenedor: cont, ifcUrl: "descargas/05_Modelo_IFC4x3_Habitaculo_AJercic.ifc", onEstado: t => { if (t) texto.textContent = t; } });
+    const v = await iniciarVisor({ contenedor: cont, ifcUrl: "descargas/05_Modelo_IFC2x3_Habitaculo_AJercic.ifc", onEstado: t => { if (t) texto.textContent = t; } });
     inicio.remove();
     const barra = document.createElement("div");
     barra.className = "v3d-barra";

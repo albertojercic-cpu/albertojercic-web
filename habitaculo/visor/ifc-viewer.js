@@ -13,6 +13,17 @@ const CLASES = {
   IfcFlowTerminal: "Artefacto sanitario", IfcBuildingElementProxy: "Elemento genérico", IfcGeographicElement: "Terreno",
   IfcCurtainWall: "Muro cortina", IfcStair: "Escalera", IfcRailing: "Baranda"
 };
+// Equivalencias IFC2x3 -> clases usadas por el visor (el terreno sale como IfcSite con geometría)
+const EQUIV = { IfcWallStandardCase: "IfcWall", IfcFurnishingElement: "IfcFurniture", IfcSite: "IfcGeographicElement" };
+// Etiquetas en español de propiedades y cantidades que se muestran en la ficha
+const ETIQ = {
+  NDI: "NDI", FireRating: "Resistencia al fuego", IsExternal: "De uso en exterior", LoadBearing: "Portante", ThermalTransmittance: "Valor U (W/m²K)",
+  Status: "Estado", FireRiskFactor: "Factor de riesgo de incendio", SeismicClassification: "Condiciones sísmicas", LandTitleID: "N° título del terreno", Restrictions: "Uso de terreno",
+  GrossArea: "Área bruta", NetArea: "Área neta", Area: "Área", GrossFloorArea: "Área bruta de piso", NetFloorArea: "Área neta de piso", GrossCeilingArea: "Área de cielo",
+  GrossVolume: "Volumen bruto", NetVolume: "Volumen neto", Length: "Longitud", Width: "Ancho", Height: "Altura", Depth: "Profundidad", Perimeter: "Perímetro",
+  GrossSideArea: "Área lateral", NetSideArea: "Área lateral neta", GrossFootprintArea: "Área en planta", CrossSectionArea: "Sección transversal", OuterSurfaceArea: "Superficie exterior"
+};
+const OMITIR = new Set(["Reference", "ExtendToStructure", "PitchAngle", "Span", "Slope", "Roll"]);
 const BLANCO = 0xe9e4dc;
 
 export async function iniciarVisor({ contenedor, ifcUrl, onEstado }) {
@@ -83,6 +94,10 @@ export async function iniciarVisor({ contenedor, ifcUrl, onEstado }) {
     // Revit exporta las fundaciones "Footing-Rectangular" como losas: se reconocen como fundaciones
     const nombreEl = (api.GetLine(modelID, eid).Name || {}).value || "";
     if (clase === "IfcSlab" && /^Footing/i.test(nombreEl)) clase = "IfcFooting";
+    // IFC2x3 (Coordination View): se normalizan las clases a las del visor
+    clase = EQUIV[clase] || clase;
+    if (clase === "IfcFlowTerminal" && /KRZ|lumin/i.test(nombreEl)) clase = "IfcLightFixture"; // las luminarias salen como terminal de flujo
+    if (clase === "IfcBuildingElementProxy" && /topogr/i.test(nombreEl)) clase = "IfcGeographicElement";
     claseDe.set(eid, clase);
     for (let i = 0; i < m.geometries.size(); i++) {
       const pg = m.geometries.get(i);
@@ -131,6 +146,17 @@ export async function iniciarVisor({ contenedor, ifcUrl, onEstado }) {
     const est = api.GetLine(modelID, r.RelatingStructure.value);
     const nombre = est && est.Name ? est.Name.value : "";
     (r.RelatedElements || []).forEach(o => nivelDe.set(o.value, nombre));
+  }
+
+  // Conjuntos de propiedades y cantidades de cada elemento (relaciones IFCRELDEFINESBYPROPERTIES);
+  // en IFC2x3 web-ifc no los entrega solo con getPropertySets, por eso se indexan aquí
+  const defPor = new Map();
+  const relProp = api.GetLineIDsWithType(modelID, WebIFC.IFCRELDEFINESBYPROPERTIES);
+  for (let i = 0; i < relProp.size(); i++) {
+    const r = api.GetLine(modelID, relProp.get(i));
+    const def = r.RelatingPropertyDefinition && r.RelatingPropertyDefinition.value;
+    if (def == null) continue;
+    (r.RelatedObjects || []).forEach(o => { if (!defPor.has(o.value)) defPor.set(o.value, []); defPor.get(o.value).push(def); });
   }
 
   // ---------- Encuadre y vistas ----------
@@ -195,7 +221,18 @@ export async function iniciarVisor({ contenedor, ifcUrl, onEstado }) {
     if (!v) return null;
     let x = v.value; if (typeof x === "number") x = Math.round(x * 1000) / 1000;
     if (x === true || x === "T") x = "Sí"; if (x === false || x === "F") x = "No";
+    // Unidades del IFC del Habitáculo: longitudes en cm, áreas en m², volúmenes en m³
+    if (typeof x === "number") x = String(Math.round(x * 100) / 100) + (p.AreaValue ? " m²" : p.VolumeValue ? " m³" : p.LengthValue ? " cm" : "");
     return String(x);
+  };
+  // Orden de la ficha: primero los Psets del estándar, luego las cantidades base y el NDI; el resto, si hay espacio
+  const prioridad = ps => {
+    const n = (ps.Name && ps.Name.value) || "";
+    if (/^Pset_(EnvironmentalImpact|Reinforcement|QuantityTakeOff|DistributionFlow|BuildingElementProxy)/.test(n)) return 9;
+    if (/^Pset_/.test(n)) return 0;
+    if (/BaseQuantities/.test(n)) return 1;
+    if (n === "Datos") return 2;
+    return 5;
   };
   async function mostrarFicha(eid) {
     limpiarResalte();
@@ -215,9 +252,15 @@ export async function iniciarVisor({ contenedor, ifcUrl, onEstado }) {
       if (nombres.size) filas.push(["Material", [...nombres].slice(0, 4).join(" · ")]);
     } catch (e) { /* sin materiales */ }
     try {
-      const psets = await api.properties.getPropertySets(modelID, eid, true, true);
-      psets.forEach(ps => (ps.HasProperties || ps.Quantities || []).forEach(p => {
-        const v = valor(p); if (v != null && p.Name && filas.length < 14) filas.push([p.Name.value, v]);
+      const delTipo = await api.properties.getPropertySets(modelID, eid, true, true);
+      const vistos = new Set(), psets = [];
+      (defPor.get(eid) || []).map(id => api.GetLine(modelID, id, true)).concat([...delTipo]).forEach(ps => {
+        if (!ps || vistos.has(ps.expressID)) return;
+        vistos.add(ps.expressID); psets.push(ps);
+      });
+      psets.sort((a, b) => prioridad(a) - prioridad(b)).forEach(ps => (ps.HasProperties || ps.Quantities || []).forEach(p => {
+        const nom = p.Name && p.Name.value;
+        const v = valor(p); if (v != null && nom && !OMITIR.has(nom) && filas.length < 16) filas.push([ETIQ[nom] || nom, v]);
       }));
     } catch (e) { /* sin propiedades */ }
     ficha.innerHTML = '<button type="button" class="v3d-ficha-x" aria-label="Cerrar ficha">×</button>' +
