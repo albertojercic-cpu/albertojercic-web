@@ -82,6 +82,9 @@
   .lista a:hover .n, .lista a:focus-visible .n { color: var(--crema-66); }
   .lista .t { font-size: clamp(16px, 1.6vw, 19px); font-weight: 600; }
   .lista .t small.d { display: block; margin-top: 5px; font-size: 12px; font-weight: 400; line-height: 1.45; letter-spacing: .01em; opacity: .72; }
+  .lista .t ul.d { list-style: none; margin: 6px 0 0; padding: 0; font-size: 12px; font-weight: 400; line-height: 1.5; letter-spacing: .01em; opacity: .72; }
+  .lista .t ul.d li { border: 0; padding-left: 14px; position: relative; }
+  .lista .t ul.d li::before { content: "–"; position: absolute; left: 0; }
   .lista .m small { display: block; margin-top: 4px; font-size: 10.5px; letter-spacing: .04em; text-transform: none; opacity: .85; text-align: right; }
   .lista .m { text-align: right; font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--cafe-62); white-space: nowrap; }
   .lista a:hover .m, .lista a:focus-visible .m { color: var(--crema-66); }
@@ -281,23 +284,24 @@ const CONFIG = {
   // href: null = aparece como "Próximamente"
   descargas: [
     { titulo: "Presentación Conceptual",     desc: "Presentación del concepto arquitectónico del habitáculo: esquema nine-square, bocetos y referentes (PDF).", formato: "ZIP · 2.1 MB", fecha: "19/10/2026", href: "descargas/01_Presentacion_Conceptual_AJercic.zip" },
-    { titulo: "Plan de Ejecución BIM (PEB)", desc: "PEB-HAB-01 Rev. 09 en DOCX y PDF: usos BIM, entregables por hito, nomenclatura, estrategia de colaboración y estructura de carpetas.", formato: "ZIP · 0.4 MB", fecha: "19/10/2026", href: "descargas/02_Plan_Ejecucion_BIM_PEB_AJercic.zip" },
-    { titulo: "Parámetros Compartidos",      desc: "Archivo de parámetros compartidos de Revit (.txt), mapeo de Psets para IFC, keynotes v8 y Anexos A, B y C con los 142 parámetros NDI-1 de la Matriz PlanBIM.", formato: "ZIP · 57 KB", fecha: "19/10/2026", href: "descargas/03_Parametros_Compartidos_AJercic.zip" },
-    { titulo: "Especificaciones Técnicas",   desc: "EETT-HAB-01 Rev. 14 en DOCX y PDF, con listado de entidades, Type Mark, keynotes y anexos térmicos, y planilla de proveedores nacionales.", formato: "ZIP · 0.5 MB", fecha: "19/10/2026", href: "descargas/04_Especificaciones_Tecnicas_AJercic.zip" },
-    { titulo: "Modelo Revit",                desc: "Modelo único de Arquitectura con estructura, Revit 2025 (.rvt), con parámetro NDI y parámetros compartidos cargados.", formato: "ZIP · 254 MB", fecha: "19/10/2026", href: null },
-    { titulo: "Planos ARQ",                  desc: "8 láminas en PDF: portada, planta, planta de techo, superficies, elevaciones, cortes A-A a D-D e isométricas.", formato: "ZIP · 3.6 MB", fecha: "19/10/2026", href: "descargas/06_Planos_ARQ_AJercic.zip" },
-    { titulo: "Exportación IFC",             desc: "Modelo en IFC2x3 con propiedades NDI-1, Psets y cantidades base, más el archivo IDS con los requisitos de información.", formato: "ZIP · 2.1 MB", fecha: "19/10/2026", href: "descargas/07_Exportacion_IFC_AJercic.zip" }
+    { titulo: "Plan de Ejecución BIM (PEB)", desc: ["PEB-HAB-01 Rev. 09 (DOCX)","PEB-HAB-01 Rev. 09 (PDF)"], formato: "ZIP · 0.4 MB", fecha: "19/10/2026", href: "descargas/02_Plan_Ejecucion_BIM_PEB_AJercic.zip" },
+    { titulo: "Parámetros Compartidos",      desc: ["Parámetros compartidos de Revit, PlanBIM_SharedParameters (TXT)","Mapeo de Psets para exportar a IFC (TXT)","Keynotes v8 (TXT)","Anexo A: elementos por categoría y entidad IFC (DOCX)","Anexo B: parámetros por categoría, 142 en NDI-1 (DOCX)","Anexo C: parámetros a ingresar (XLSX)"], formato: "ZIP · 57 KB", fecha: "19/10/2026", href: "descargas/03_Parametros_Compartidos_AJercic.zip" },
+    { titulo: "Especificaciones Técnicas",   desc: ["EETT-HAB-01 Rev. 14 (DOCX)","EETT-HAB-01 Rev. 14 (PDF)","Planilla de proveedores nacionales (XLSX)"], formato: "ZIP · 0.5 MB", fecha: "19/10/2026", href: "descargas/04_Especificaciones_Tecnicas_AJercic.zip" },
+    { titulo: "Modelo Revit",                desc: "Modelo único de Arquitectura con estructura, Revit 2025 (RVT), con parámetro NDI y parámetros compartidos cargados.", formato: "ZIP · 254 MB", fecha: "19/10/2026", href: null },
+    { titulo: "Planos ARQ",                  desc: ["ARQ-00 Portada (PDF)","ARQ-01 Planta de arquitectura (PDF)","ARQ-02 Planta de techo (PDF)","ARQ-03 Superficies (PDF)","ARQ-04 Elevaciones (PDF)","ARQ-05 Cortes A-A a D-D (PDF)","ARQ-06 Cortes A-A a D-D, segunda lámina (PDF)","ARQ-08 Isométricas (PDF)"], formato: "ZIP · 3.6 MB", fecha: "19/10/2026", href: "descargas/06_Planos_ARQ_AJercic.zip" },
+    { titulo: "Exportación IFC",             desc: ["Modelo en IFC2x3 con NDI-1, Psets y cantidades base (IFC)","Requisitos de información PlanBIM (IDS)"], formato: "ZIP · 2.1 MB", fecha: "19/10/2026", href: "descargas/07_Exportacion_IFC_AJercic.zip" }
   ]
 };
 
 /* ---------- Descargas ---------- */
+const desc = x => !x ? "" : Array.isArray(x) ? `<ul class="d">${x.map(i => `<li>${i}</li>`).join("")}</ul>` : `<small class="d">${x}</small>`;
 const flecha = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 4v12m0 0l-5-5m5 5l5-5M5 20h14"/></svg>';
 document.getElementById("lista").innerHTML = CONFIG.descargas.map((d, i) => {
   const n = String(i + 1).padStart(2, "0");
   const externo = d.href && /^https?:/.test(d.href);
   return d.href
-    ? `<li><a href="${d.href}" ${externo ? 'target="_blank" rel="noopener"' : "download"}><span class="n">${n}</span><span class="t">${d.titulo}${d.desc ? `<small class="d">${d.desc}</small>` : ""}</span><span class="m">${d.formato}${d.fecha ? `<small>Actualizado ${d.fecha}</small>` : ""}</span>${flecha}</a></li>`
-    : `<li><span class="off"><span class="n">${n}</span><span class="t">${d.titulo}${d.desc ? `<small class="d">${d.desc}</small>` : ""}</span><span class="m">Próximamente</span></span></li>`;
+    ? `<li><a href="${d.href}" ${externo ? 'target="_blank" rel="noopener"' : "download"}><span class="n">${n}</span><span class="t">${d.titulo}${desc(d.desc)}</span><span class="m">${d.formato}${d.fecha ? `<small>Actualizado ${d.fecha}</small>` : ""}</span>${flecha}</a></li>`
+    : `<li><span class="off"><span class="n">${n}</span><span class="t">${d.titulo}${desc(d.desc)}</span><span class="m">Próximamente</span></span></li>`;
 }).join("");
 
 /* ---------- Recorrido ---------- */
