@@ -11,14 +11,16 @@
 <style>
   :root{
     --ink:#392F2B;
-    --paper:#D3C9BF;
-    --paper-light:#EDE9E0;
+    --paper:#E8E3DA;
+    --paper-light:#F3EFE8;
     --line: rgba(57,47,43,0.16);
     --line-strong: rgba(57,47,43,0.28);
     --muted: rgba(57,47,43,0.62);
     --muted-strong: rgba(57,47,43,0.86);
-    --on-ink:#EDE9E0;
-    --on-ink-muted: rgba(237,233,224,0.66);
+    --on-ink:#F3EFE8;
+    --accent:#392F2B;
+    --accent-on-ink:#F3EFE8;
+    --on-ink-muted: rgba(243,239,232,0.66);
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--paper);font-family:'Urbanist',ui-sans-serif,system-ui,sans-serif;}
@@ -56,13 +58,13 @@
   .tr-card:focus-visible{ outline:2px solid var(--on-ink); outline-offset:3px; }
   .tr-card canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; transition:transform 1.2s cubic-bezier(.2,.8,.2,1); }
   .tr-card:hover canvas{ transform:scale(1.025); }
-  .tr-card::after{ content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(to top, rgba(26,20,17,.8) 0%, rgba(26,20,17,0) 52%); }
+  .tr-card::after{ content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(to top, rgba(24,19,16,.8) 0%, rgba(24,19,16,0) 52%); }
   .tr-tx{ position:absolute; z-index:2; left:clamp(16px,2.2vw,30px); right:clamp(16px,2.2vw,30px); bottom:clamp(14px,2vw,26px); pointer-events:none; }
   .tr-tx .no{ display:block; font-size:11px; font-weight:700; letter-spacing:.14em; color:var(--on-ink-muted); font-variant-numeric:tabular-nums; margin-bottom:4px; }
   .tr-tx h2{ margin:0; font-size:clamp(17px,1.9vw,28px); font-weight:700; line-height:1.05; letter-spacing:-.01em; max-width:14ch; text-wrap:balance; }
   .tr-tx p{ margin:10px 0 0; font-size:clamp(10px,.8vw,12px); font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--on-ink-muted); }
-  .tr-st{ position:absolute; z-index:2; top:14px; right:14px; max-width:calc(100% - 150px); font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:rgba(26,20,17,.55); backdrop-filter:blur(6px); padding:7px 12px; border-radius:999px; pointer-events:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .tr-bar{ position:absolute; z-index:2; left:0; right:0; bottom:0; height:2px; background:rgba(237,233,224,0.2); pointer-events:none; }
+  .tr-st{ position:absolute; z-index:2; top:14px; right:14px; max-width:calc(100% - 150px); font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; background:rgba(24,19,16,.55); backdrop-filter:blur(6px); padding:7px 12px; border-radius:999px; pointer-events:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tr-bar{ position:absolute; z-index:2; left:0; right:0; bottom:0; height:2px; background:rgba(243,239,232,0.2); pointer-events:none; }
   .tr-bar i{ display:block; height:100%; background:var(--on-ink); transform-origin:left; transform:scaleX(0); }
   @media (max-width:700px){
     .tr-grid{ grid-template-columns:1fr; }
@@ -87,7 +89,7 @@
   }
 
   /* Botones de contacto en el pie (WhatsApp / LinkedIn) */
-  .foot-social{ width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(237,233,224,0.35); color:var(--on-ink); transition:background .2s, color .2s, border-color .2s; }
+  .foot-social{ width:34px; height:34px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(243,239,232,0.35); color:var(--on-ink); transition:background .2s, color .2s, border-color .2s; }
   .foot-social:hover, .foot-social:focus-visible{ background:var(--on-ink); color:var(--ink); border-color:var(--on-ink); outline:none; }
 
   /* Ventana de acceso al portafolio (contraseña / solicitud) */
@@ -117,11 +119,11 @@
   @media (max-width:700px){ .foot-cv{ font-size:13px; } }
 
   /* Etiqueta BIM en la esquina superior izquierda de cada recorrido */
-  .tr-bim{ position:absolute; z-index:2; top:14px; left:14px; display:inline-flex; align-items:center; gap:7px; font-size:10.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--on-ink); background:rgba(26,20,17,.45); backdrop-filter:blur(6px); padding:6px 11px; border-radius:999px; pointer-events:none; opacity:.9; }
+  .tr-bim{ position:absolute; z-index:2; top:14px; left:14px; display:inline-flex; align-items:center; gap:7px; font-size:10.5px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--on-ink); background:rgba(24,19,16,.45); backdrop-filter:blur(6px); padding:6px 11px; border-radius:999px; pointer-events:none; opacity:.9; }
   .tr-bim i{ width:6px; height:6px; border-radius:50%; background:var(--paper); }
 
   /* Indicación elegante: cursor que se desliza a los lados; desaparece al usar la animación */
-  .tr-hint{ position:absolute; z-index:2; left:50%; top:46%; width:92px; height:92px; margin:-46px 0 0 -46px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--on-ink); background:rgba(26,20,17,.32); backdrop-filter:blur(6px); border:1px solid rgba(237,233,224,.28); pointer-events:none; transition:opacity .5s ease, transform .5s ease; }
+  .tr-hint{ position:absolute; z-index:2; left:50%; top:46%; width:92px; height:92px; margin:-46px 0 0 -46px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--on-ink); background:rgba(24,19,16,.32); backdrop-filter:blur(6px); border:1px solid rgba(243,239,232,.28); pointer-events:none; transition:opacity .5s ease, transform .5s ease; }
   .tr-hint svg{ width:52px; height:34px; }
   .tr-hint-cur{ animation:trDesliza 2.6s ease-in-out infinite; transform-box:fill-box; }
   .tr-hint-arr{ opacity:.55; }
@@ -131,8 +133,8 @@
 
   /* Línea de tiempo: zoom editable, notas abajo a la izquierda */
   .tl-zoominput{ width:52px; min-width:0 !important; box-sizing:border-box; font:inherit; font-size:13.2px; color:var(--on-ink-muted); text-align:center; background:transparent; border:1px solid transparent; border-radius:999px; padding:4px 2px; cursor:text; }
-  .tl-zoominput:hover{ border-color:rgba(237,233,224,0.28); }
-  .tl-zoominput:focus{ outline:none; color:var(--on-ink); border-color:var(--on-ink); background:rgba(237,233,224,0.06); }
+  .tl-zoominput:hover{ border-color:rgba(243,239,232,0.28); }
+  .tl-zoominput:focus{ outline:none; color:var(--on-ink); border-color:var(--on-ink); background:rgba(243,239,232,0.06); }
   .tl-notes{ position:absolute; left:20px; bottom:16px; z-index:2; display:flex; flex-direction:column; gap:6px; max-width:calc(100% - 40px); font-size:12.6px; line-height:1.45; color:var(--on-ink-muted); background:rgba(57,47,43,0.78); backdrop-filter:blur(6px); padding:10px 14px; border-radius:12px; pointer-events:none; }
   .tl-notes-line{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   @media (max-width:700px){ .tl-title-sub{ display:none; } .tl-zoominput{ width:40px; font-size:10.8px !important; } .tl-notes{ font-size:11px; left:10px; bottom:10px; } }
@@ -142,6 +144,55 @@
 
   /* Celular: la descripción alineada a la izquierda para evitar espacios grandes entre palabras */
   @media (max-width: 700px){ .bio-text{ text-align:left !important; font-size:17px !important; } }
+  /* Paleta Avena · Chocolate · Cobalto: el azul solo en toques puntuales */
+  ::selection{background:var(--accent);color:#fff;}
+  a:hover{border-bottom-color:var(--accent);}
+  .tr-bim i{ background:var(--accent-on-ink); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent); }
+  .tr-bar i{ background:var(--accent-on-ink); }
+  .cv-row ul li::marker{ color:var(--accent); }
+  .cv-row > div:first-child > div:first-child{ color:var(--accent); }
+  .cv-row > div:first-child > div:nth-child(2){ color:var(--accent) !important; opacity:1; font-weight:500 !important; }
+  .lk-primary{ background:var(--accent) !important; border-color:var(--accent) !important; color:#fff !important; }
+  .lk-link{ color:var(--accent); }
+  .lk-input{ outline-color:var(--accent); }
+  .lk-link:focus-visible, .lk-btn:focus-visible, .tr-card:focus-visible{ outline-color:var(--accent) !important; }
+  #btnHabitaculo:hover{ background:color-mix(in srgb, var(--accent) 14%, transparent) !important; border-color:var(--accent) !important; }
+  .tl-zoominput:focus{ border-color:var(--accent); }
+  /* Línea de presentación superior */
+  .topline{ background:var(--ink); color:var(--on-ink); border-bottom:1px solid rgba(243,239,232,0.12); }
+  .topline .in{ max-width:1416px; margin:0 auto; padding:18px clamp(16px,2vw,24px); display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:6px 24px; }
+  .topline b{ font-size:17px; font-weight:800; letter-spacing:.02em; }
+  .topline span{ font-size:14px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--on-ink-muted); display:inline-flex; align-items:center; gap:10px; }
+  .topline span i{ width:7px; height:7px; border-radius:50%; background:var(--accent); flex:none; }
+  @media (max-width:700px){ .topline span{ font-size:11.5px; letter-spacing:.1em; } }
+
+  /* Proyecto destacado: Cariola */
+  .feat{ margin-top:22px; padding-left:6px; }
+  .feat .ey{ font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--accent); }
+  .feat h3{ margin:6px 0 2px; font-size:17.4px; font-weight:700; line-height:1.35; }
+  .feat .loc{ font-size:15px; color:var(--muted); }
+  .feat .kpis{ display:flex; flex-wrap:wrap; gap:4px 0; margin:10px 0 8px; font-size:15px; color:var(--muted-strong); }
+  .feat .kpis span:not(:last-child)::after{ content:"·"; margin:0 10px; color:var(--muted); }
+  .feat .kpis b{ font-weight:700; color:var(--ink); }
+  .feat p{ margin:0; font-size:16.4px; line-height:1.6; }
+  @media (max-width:700px){ .feat{ grid-column:auto !important; margin-top:6px; padding-left:5px; } }
+  .cv-row > div:first-child > div:nth-child(2){ color:var(--muted-strong) !important; font-weight:600 !important; }
+  /* Encabezado en celular: un elemento por línea */
+  .nm-short, .mx-short{ display:none; }
+  @media (max-width:700px){
+    .nm-full, .mx-full{ display:none; }
+    .nm-short, .mx-short{ display:inline; }
+    h1 .nm-short{ white-space:nowrap; }
+    .hero-tags{ flex-direction:column; align-items:flex-start !important; gap:4px !important; font-size:13.5px !important; }
+    .hero-tags .sep{ display:none; }
+    .hero-arq{ font-size:14.5px !important; letter-spacing:0.1em !important; white-space:nowrap; }
+    .hero-arq span{ font-size:15px; }
+    .hero-ct{ text-align:left !important; flex-basis:100%; margin-top:-8px; }
+    .feat .ey span{ display:block; }
+    .feat .ey .sep{ display:none; }
+    .bio-tx{ text-align:left !important; font-size:17px !important; }
+  }
+  .tr-bim i{ display:none !important; }
 </style>
 </head>
 <body>
@@ -175,12 +226,13 @@
     <div style="max-width:1416px; margin:0 auto; padding:clamp(48px,7.2vw,86.4px) clamp(28.8px,6vw,57.6px) clamp(38.4px,6vw,67.2px); box-sizing:border-box;">
       <div style="display:flex; flex-wrap:wrap; align-items:flex-end; gap:28px;">
         <div style="display:flex; flex-direction:column;">
-          <h1 style="margin:0; font-size:clamp(38.4px,5.5vw,60px); font-weight:800; letter-spacing:0.01em; line-height:1.04;">Alberto Jercic Martinic</h1>
-          <div style="font-size:18px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-top:clamp(22px,2.4vw,32px);">Arquitecto <span style="font-weight:400; letter-spacing:0.02em; text-transform:none; color:var(--on-ink-muted);">· Universidad de Chile</span></div>
-          <div style="font-size:18px; font-weight:400; color:var(--on-ink-muted); margin-top:4.8px;">Máster en Gestión BIM de proyectos de Arquitectura e Interiorismo</div>
+          <h1 style="margin:0; font-size:clamp(38.4px,5.5vw,60px); font-weight:800; letter-spacing:0.01em; line-height:1.04;"><span class="nm-full">Alberto Jercic Martinic</span><span class="nm-short" aria-hidden="true">Alberto Jercic M.</span></h1>
+          <div class="hero-arq" style="font-size:18px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; margin-top:clamp(22px,2.4vw,32px);">Arquitecto <span style="font-weight:400; letter-spacing:0.02em; text-transform:none; color:var(--on-ink-muted);">· Universidad de Chile</span></div>
+          <div style="font-size:18px; font-weight:400; color:var(--on-ink-muted); margin-top:4.8px;"><span class="mx-full">Máster en Gestión BIM de proyectos de Arquitectura e Interiorismo</span><span class="mx-short" aria-hidden="true">Máster en Gestión BIM</span></div>
+          <div style="display:flex; align-items:center; gap:10px; font-size:15px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--on-ink); margin-top:16px;" class="hero-tags"><span>Coordinación de proyectos</span><span class="sep" aria-hidden="true">·</span><span>IA aplicada</span></div>
         </div>
         <div style="flex:1; min-width:12px;"></div>
-        <div style="text-align:right; font-size:16.2px; line-height:1.35; color:var(--on-ink-muted); white-space:nowrap;">
+        <div class="hero-ct" style="text-align:right; font-size:16.2px; line-height:1.35; color:var(--on-ink-muted); white-space:nowrap;">
           <div>+56 9 6334 3498</div>
           <div style="margin-top:2px;">alberto.jercic@gmail.com</div>
         </div>
@@ -201,7 +253,7 @@
   <!-- ============ EXPERIENCIA ============ -->
   <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
     <div style="display:flex; align-items:baseline; justify-content:space-between; gap:19.2px; margin-bottom:clamp(26.4px,3.6vw,40.8px); flex-wrap:wrap;">
-      <h2 style="margin:0; font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Experiencia</h2>
+      <h2 style="margin:0; font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;" class="sec-t">Experiencia</h2>
     </div>
 
     <div style="display:flex; flex-direction:column;">
@@ -213,11 +265,17 @@
           <div style="font-size:14.4px; color:var(--muted); margin-top:7.2px; letter-spacing:0.02em;">10/2022 — Actualidad</div>
         </div>
         <ul style="margin:0; padding:0 0 0 21.6px; font-size:17.4px; line-height:1.65; color:var(--ink);">
-          <li style="margin-bottom:7.2px;"><strong>Desarrollo de proyectos de Arquitectura e Interiorismo:</strong> Inmobiliarios, residenciales, retail, oficinas y concursos.</li>
-          <li style="margin-bottom:7.2px;"><strong>Implementación y estandarización BIM (Revit):</strong> modelado, cubicaciones, documentación planimétrica y coordinación de especialidades previo y durante la ejecución de obra.</li>
-          <li style="margin-bottom:7.2px;"><strong>Coordinación y control de obra:</strong> representante de arquitectura a cargo de la ejecución y habilitación; gestión de reuniones en terreno con proyectistas, instaladores, proveedores y constructora.</li>
-          <li style="margin-bottom:0;"><strong>Dirección de representación digital fotorrealista:</strong> renders, videos, recorridos virtuales 360° e integración de herramientas de Inteligencia Artificial generativa.</li>
+          <li style="margin-bottom:7.2px;"><strong>Desarrollo de proyectos de Arquitectura e Interiorismo:</strong> inmobiliarios, residenciales, retail, oficinas y concursos.</li>
+          <li style="margin-bottom:7.2px;"><strong>Implementación BIM (Revit):</strong> modelado, cubicaciones, documentación planimétrica y coordinación de especialidades.</li>
+          <li style="margin-bottom:7.2px;"><strong>IA aplicada a la gestión de proyectos (Claude):</strong> estimación de costos desde planos y EETT con dashboard para el cliente inmobiliario, y revisión de incongruencias en entrega planimétrica (180 planos revisados en 2 minutos).</li>
+          <li style="margin-bottom:0;"><strong>Dirección de representación digital:</strong> renders, videos, recorridos 360° e IA generativa.</li>
         </ul>
+        <div class="feat" style="grid-column:2;">
+          <div class="ey"><span>Proyecto destacado</span><span class="sep" aria-hidden="true"> · </span><span>Coordinación y obra</span></div>
+          <h3>Oficinas Cariola Díez Pérez-Cotapos</h3>
+          <div class="loc">Vitacura · 2026 · +1.200 m²</div>
+                    <p style="margin-top:10px;">Representante de arquitectura en obra, a cargo de la ejecución y habilitación: modelado, documentación, cubicación y coordinación de especialidades en Revit, y gestión en terreno con proyectistas, instaladores, proveedores y constructora.</p>
+        </div>
       </div>
 
       <div class="cv-row" style="display:grid; grid-template-columns: 264px 1fr; gap:33.6px; padding:26.4px 0; border-top:1px solid var(--line);">
@@ -286,16 +344,16 @@
   <!-- ============ FORMACIÓN ============ -->
   <div style="width:100%; background:var(--paper);">
     <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
-      <h2 style="margin:0 0 clamp(44px,5.4vw,64px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Formación</h2>
+      <h2 style="margin:0 0 clamp(44px,5.4vw,64px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;" class="sec-t">Formación</h2>
 
       <div class="edu-row" style="display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:clamp(48px,8vw,128px); margin-bottom:36px;">
         <div class="edu-master">
-          <div style="font-size:17.4px; font-weight:700; line-height:1.4;">Máster Internacional en Gestión BIM de proyectos de arquitectura e interiorismo</div>
+          <div style="font-size:17.4px; font-weight:700; line-height:1.4; color:var(--accent);">Máster Internacional en Gestión BIM de proyectos de arquitectura e interiorismo</div>
           <div style="font-size:15.6px; font-weight:600; color:var(--muted-strong); margin-top:7.2px; line-height:1.5;">UCAM Universidad Católica de Murcia · EADIC Escuela Abierta de Desarrollo en Ingeniería y Construcción</div>
           <div style="font-size:14.4px; color:var(--muted); margin-top:7.2px;">11/2023 — 11/2024</div>
         </div>
         <div>
-          <div style="font-size:17.4px; font-weight:700; line-height:1.4;">Arquitecto</div>
+          <div style="font-size:17.4px; font-weight:700; line-height:1.4; color:var(--accent);">Arquitecto</div>
           <div style="font-size:15.6px; font-weight:600; color:var(--muted-strong); margin-top:7.2px; line-height:1.5;">Universidad de Chile — Distinción Máxima</div>
           <div style="font-size:14.4px; color:var(--muted); margin-top:7.2px;">2012 — 2019</div>
         </div>
@@ -303,9 +361,9 @@
 
       <div style="height:1px; background:var(--line); margin-bottom:28.8px;"></div>
 
-      <div style="font-size:15px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:19.2px;">Formación continua</div>
+      <div style="font-size:15px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); margin-bottom:19.2px;">Formación continua</div>
       <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(312px,1fr)); gap:16.8px 33.6px;">
-        <div style="font-size:16.2px; line-height:1.5;"><strong>Workshop BIM (Revit) + IA (Claude)</strong><br><span style="color:var(--muted);">The BIM CO-WORK · 08/2026 – 11/2026</span><br><a href="habitaculo/" id="btnHabitaculo" style="display:inline-block; margin-top:10px; padding:8px 20px; border-radius:999px; background:var(--ink); color:var(--on-ink); border:1px solid var(--ink); font-size:13px; font-weight:600; letter-spacing:.02em; text-decoration:none;">Ver proyecto Habitáculo →</a></div>
+        <div style="font-size:16.2px; line-height:1.5;"><strong>Workshop BIM (Revit) + IA (Claude)</strong><br><span style="color:var(--muted);">The BIM CO-WORK · 08/2026 – 11/2026</span><br><a href="habitaculo/" id="btnHabitaculo" style="display:inline-block; margin-top:10px; padding:8px 20px; border-radius:999px; background:color-mix(in srgb, var(--accent) 8%, transparent); color:var(--accent); border:1px solid color-mix(in srgb, var(--accent) 35%, transparent); font-size:13px; font-weight:600; letter-spacing:.02em; text-decoration:none;">Ver proyecto Habitáculo →</a></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Curso de IA Generativa como herramienta creativa</strong><br><span style="color:var(--muted);">Rodrigo Ocharán · 05/2026</span></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Automatización y Coordinación BIM con Dynamo</strong><br><span style="color:var(--muted);">Universidad Federico Santa María · 01/2026</span></div>
         <div style="font-size:16.2px; line-height:1.5;"><strong>Taller Avanzado de Inteligencia Artificial</strong><br><span style="color:var(--muted);">El Feo Revollo · 02/2025</span></div>
@@ -322,39 +380,39 @@
 
   <!-- ============ PROGRAMAS ============ -->
   <div style="max-width:1416px; margin:0 auto; padding:clamp(60px,8vw,100px) clamp(28.8px,6vw,57.6px); box-sizing:border-box;">
-    <h2 style="margin:0 0 clamp(44px,5.4vw,64px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;">Software</h2>
+    <h2 style="margin:0 0 clamp(44px,5.4vw,64px); font-size:clamp(28.8px,3.1vw,36px); font-weight:800; letter-spacing:0.06em; text-transform:uppercase;" class="sec-t">Software</h2>
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(228px,1fr)); gap:clamp(40px,4vw,56px) 33.6px;">
       <div>
         <div style="font-size:15px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted-strong); margin-bottom:24px;">BIM / CAD</div>
         <div style="display:flex; flex-direction:column; gap:12px;">
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Revit</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">AutoCAD</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Navisworks</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Archicad</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Revit</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">AutoCAD</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Navisworks</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Archicad</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
         </div>
       </div>
       <div>
         <div style="font-size:15px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted-strong); margin-bottom:24px;">Modelado 3D</div>
         <div style="display:flex; flex-direction:column; gap:12px;">
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">SketchUp</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Rhinoceros</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">3ds Max</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">SketchUp</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Rhinoceros</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:150px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">3ds Max</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
         </div>
       </div>
       <div>
         <div style="font-size:15px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted-strong); margin-bottom:24px;">Renderizado</div>
         <div style="display:flex; flex-direction:column; gap:12px;">
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:190px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Lumion</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:190px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">D5</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:190px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Corona</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:190px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Lumion</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:190px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">D5</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:190px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Corona</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
         </div>
       </div>
       <div>
         <div style="font-size:15px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted-strong); margin-bottom:24px;">IA</div>
         <div style="display:flex; flex-direction:column; gap:12px;">
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:232px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Nano Banana / Gemini</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:232px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Claude / Anthropic</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
-          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:232px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--ink); flex:none;"></span><span style="font-size:17.4px;">Kling AI (animación)</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:232px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Nano Banana / Gemini</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:232px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Claude / Anthropic</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
+          <div style="display:flex; align-items:center;"><div style="display:flex; align-items:center; gap:10.8px; width:232px; flex:none;"><span style="width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none;"></span><span style="font-size:17.4px;">Kling AI (animación)</span></div><div style="display:flex; align-items:center; gap:3.6px; flex:none;"><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; background:var(--ink);"></span><span style="width:6px; height:6px; border-radius:50%; border:1px solid var(--muted);"></span></div></div>
         </div>
       </div>
     </div>
@@ -370,26 +428,26 @@
     <div class="cta-hint" style="font-size:clamp(11px,1.7vw,16.2px); line-height:1.6; color:var(--on-ink-muted); white-space:nowrap;">Haz clic en los botones para acceder al portafolio de proyectos o explorar la línea de tiempo completa.</div>
   </div>
   <!-- ============ FOOTER ============ -->
-  <div style="width:calc(100% - 2*clamp(28.8px,6vw,57.6px)); max-width:calc(1416px - 2*clamp(28.8px,6vw,57.6px)); margin:0 auto; padding:28px 0 40px; box-sizing:border-box; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14.4px; color:var(--on-ink-muted); border-top:1px solid rgba(237,233,224,0.14);">
+  <div style="width:calc(100% - 2*clamp(28.8px,6vw,57.6px)); max-width:calc(1416px - 2*clamp(28.8px,6vw,57.6px)); margin:0 auto; padding:28px 0 40px; box-sizing:border-box; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:14.4px; color:var(--on-ink-muted); border-top:1px solid rgba(243,239,232,0.14);">
     <div style="display:flex; align-items:center; gap:10px;"><a class="foot-social" href="https://wa.me/56963343498" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp" title="Escribir por WhatsApp"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.26 8.26 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.22.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></svg></a><a class="foot-social" href="https://www.linkedin.com/in/albertojercicarquitecto" target="_blank" rel="noopener" aria-label="Perfil de LinkedIn" title="Perfil de LinkedIn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4V21H3V9.75zm7 0h3.83v1.54h.05c.53-1 1.84-2.06 3.79-2.06 4.05 0 4.8 2.67 4.8 6.13V21h-4v-4.98c0-1.19-.02-2.72-1.66-2.72-1.66 0-1.91 1.3-1.91 2.63V21h-4V9.75z"/></svg></a><span style="margin-left:6px;">Arq. Alberto Jercic Martinic</span></div>
     <a class="foot-cv" href="cv/CV-Arq-Alberto-Jercic-Martinic.pdf" download="CV Arq. Alberto Jercic Martinic.pdf" target="_blank" rel="noopener"><span>Descargar CV versión PDF</span><span class="foot-social" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11m0 0l-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg></span></a>
   </div>
   </div>
 
   <!-- ============ PORTFOLIO MODAL (opens over the CV, closeable) ============ -->
-  <div id="portfolioOverlay" style="position:fixed; inset:0; background:rgba(20,16,14,0.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.4vh 1.4vw; box-sizing:border-box;">
+  <div id="portfolioOverlay" style="position:fixed; inset:0; background:rgba(24,19,16,0.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.4vh 1.4vw; box-sizing:border-box;">
     <div id="portfolioModalBox" style="width:100%; height:100%; max-width:2320px; background:var(--ink); color:var(--on-ink); border-radius:21.6px; box-shadow:0 24px 72px rgba(0,0,0,0.45); overflow:hidden; display:flex; flex-direction:column;">
 
       <!-- title bar -->
-      <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(237,233,224,0.05); border-bottom:1px solid rgba(237,233,224,0.14); position:relative;">
+      <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(243,239,232,0.05); border-bottom:1px solid rgba(243,239,232,0.14); position:relative;">
         <div class="tl-title" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:15.6px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Portafolio</div>
         <div class="tl-controls" style="margin-left:auto; display:flex; align-items:center; gap:9.6px;">
-          <button id="pfPrev" title="Página anterior" aria-label="Página anterior" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0;">‹</button>
+          <button id="pfPrev" title="Página anterior" aria-label="Página anterior" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0;">‹</button>
           <span id="pfPageLabel" class="tl-zoomlabel" style="min-width:52px; text-align:center; font-size:12.6px; font-weight:600; white-space:nowrap;">1 / 1</span>
-          <button id="pfNext" title="Página siguiente" aria-label="Página siguiente" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0;">›</button>
-          <button id="pfZoomOut" title="Alejar" aria-label="Alejar" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0; margin-left:4.8px;">−</button>
-          <button id="pfZoomIn" title="Acercar" aria-label="Acercar" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0;">+</button>
-          <button id="pfFullscreen" title="Pantalla completa" aria-label="Pantalla completa" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:14.4px; display:flex; align-items:center; justify-content:center; padding:0; margin-left:4.8px;">⛶</button>
+          <button id="pfNext" title="Página siguiente" aria-label="Página siguiente" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0;">›</button>
+          <button id="pfZoomOut" title="Alejar" aria-label="Alejar" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0; margin-left:4.8px;">−</button>
+          <button id="pfZoomIn" title="Acercar" aria-label="Acercar" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); font-size:16.2px; display:flex; align-items:center; justify-content:center; padding:0;">+</button>
+          <button id="pfFullscreen" title="Pantalla completa" aria-label="Pantalla completa" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); font-size:14.4px; display:flex; align-items:center; justify-content:center; padding:0; margin-left:4.8px;">⛶</button>
           <button id="btnPortfolioClose" title="Cerrar" aria-label="Cerrar" class="tl-closebtn" style="cursor:pointer; font-family:inherit; width:30px; height:30px; border-radius:50%; border:none; background:#FFFFFF; color:var(--ink); display:flex; align-items:center; justify-content:center; margin-left:9.6px; padding:0; flex:none;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#392F2B" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"></path></svg>
           </button>
@@ -398,8 +456,8 @@
 
       <!-- portfolio viewer: each page is a pre-rendered image (exported from the source PDF), so it always
            looks exactly like the original design regardless of browser/PDF-plugin quirks -->
-      <div id="pfViewportWrap" style="flex:1; min-height:0; position:relative; background:#5a5551; overflow:auto; display:flex; align-items:flex-start; justify-content:center;">
-        <div id="pfLoading" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(237,233,224,0.75); font-size:14.4px; text-align:center; padding:0 24px;">Cargando portafolio…</div>
+      <div id="pfViewportWrap" style="flex:1; min-height:0; position:relative; background:#4A3A31; overflow:auto; display:flex; align-items:flex-start; justify-content:center;">
+        <div id="pfLoading" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:rgba(243,239,232,0.75); font-size:14.4px; text-align:center; padding:0 24px;">Cargando portafolio…</div>
         <img id="pfImg" alt="" style="display:none; margin:24px auto; box-shadow:0 8px 24px rgba(0,0,0,0.4);" />
       </div>
 
@@ -407,9 +465,9 @@
   </div>
 
   <!-- ============ PROYECTO HABITÁCULO (se abre sobre el CV, igual que Portafolio) ============ -->
-  <div id="habOverlay" style="position:fixed; inset:0; background:rgba(20,16,14,0.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.4vh 1.4vw; box-sizing:border-box;">
+  <div id="habOverlay" style="position:fixed; inset:0; background:rgba(24,19,16,0.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.4vh 1.4vw; box-sizing:border-box;">
     <div style="width:100%; height:100%; max-width:2320px; background:var(--ink); color:var(--on-ink); border-radius:21.6px; box-shadow:0 24px 72px rgba(0,0,0,0.45); overflow:hidden; display:flex; flex-direction:column;">
-      <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(237,233,224,0.05); border-bottom:1px solid rgba(237,233,224,0.14); position:relative;">
+      <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(243,239,232,0.05); border-bottom:1px solid rgba(243,239,232,0.14); position:relative;">
         <div class="tl-title" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:15.6px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Habitáculo y Refugio Turístico</div>
         <div class="tl-controls" style="margin-left:auto; display:flex; align-items:center; gap:9.6px;">
           <button id="btnHabClose" title="Cerrar" aria-label="Cerrar" class="tl-closebtn" style="cursor:pointer; font-family:inherit; width:30px; height:30px; border-radius:50%; border:none; background:#FFFFFF; color:var(--ink); display:flex; align-items:center; justify-content:center; padding:0; flex:none;">
@@ -422,18 +480,18 @@
   </div>
 
   <!-- ============ TIMELINE MODAL (opens over the CV, closeable) ============ -->
-  <div id="timelineOverlay" style="position:fixed; inset:0; background:rgba(20,16,14,0.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.4vh 1.4vw; box-sizing:border-box; touch-action:none;">
+  <div id="timelineOverlay" style="position:fixed; inset:0; background:rgba(24,19,16,0.55); backdrop-filter:blur(4px); display:none; align-items:center; justify-content:center; z-index:1000; padding:1.4vh 1.4vw; box-sizing:border-box; touch-action:none;">
     <div style="width:100%; height:100%; max-width:2320px; background:var(--ink); color:var(--on-ink); border-radius:21.6px; box-shadow:0 24px 72px rgba(0,0,0,0.45); overflow:hidden; display:flex; flex-direction:column;">
 
       <!-- title bar -->
-      <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(237,233,224,0.05); border-bottom:1px solid rgba(237,233,224,0.14); position:relative;">
+      <div class="tl-bar" style="flex:none; display:flex; align-items:center; padding:0 19.2px; height:52.8px; background:rgba(243,239,232,0.05); border-bottom:1px solid rgba(243,239,232,0.14); position:relative;">
         <div class="tl-title" style="position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size:15.6px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; white-space:nowrap;">Línea de tiempo de proyectos<span class="tl-title-sub"> · Arq. Alberto Jercic Martinic</span></div>
         <div class="tl-controls" style="margin-left:auto; display:flex; align-items:center; gap:9.6px;">
           <div id="projectTotalLabel" class="tl-total" style="font-size:13.2px; color:var(--on-ink-muted); margin-right:9.6px; white-space:nowrap;"></div>
-          <button id="btnZoomOut" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.8px; line-height:1;">−</button>
+          <button id="btnZoomOut" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); font-size:16.8px; line-height:1;">−</button>
           <input id="zoomLabel" class="tl-zoomlabel tl-zoominput" type="text" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Zoom en porcentaje. Escribe un número y presiona Enter" title="Escribe un porcentaje y presiona Enter">
-          <button id="btnZoomIn" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); font-size:16.8px; line-height:1;">+</button>
-          <button id="btnReset" style="cursor:pointer; font-family:inherit; border-radius:999px; padding:6px 14.4px; font-size:12.6px; font-weight:600; border:1px solid rgba(237,233,224,0.28); background:transparent; color:var(--on-ink); margin-left:4.8px; white-space:nowrap;">Centrar</button>
+          <button id="btnZoomIn" class="tl-zoombtn" style="cursor:pointer; font-family:inherit; width:28.8px; height:28.8px; border-radius:50%; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); font-size:16.8px; line-height:1;">+</button>
+          <button id="btnReset" style="cursor:pointer; font-family:inherit; border-radius:999px; padding:6px 14.4px; font-size:12.6px; font-weight:600; border:1px solid rgba(243,239,232,0.28); background:transparent; color:var(--on-ink); margin-left:4.8px; white-space:nowrap;">Centrar</button>
           <button id="btnClose" title="Cerrar" aria-label="Cerrar" class="tl-closebtn" style="cursor:pointer; font-family:inherit; width:30px; height:30px; border-radius:50%; border:none; background:#FFFFFF; color:var(--ink); display:flex; align-items:center; justify-content:center; margin-left:9.6px; padding:0; flex:none;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#392F2B" stroke-width="2.6" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"></path></svg>
           </button>
@@ -447,7 +505,7 @@
         </div>
         <div class="tl-notes" aria-label="Indicaciones">
           <div class="tl-bim-legend" style="display:flex; align-items:center;">
-            <span style="width:9.2px; height:9.2px; border-radius:50%; background:var(--on-ink); flex:none;"></span>
+            <span style="width:9.2px; height:9.2px; border-radius:50%; background:var(--accent-on-ink); flex:none;"></span>
             <span style="margin-left:7.5px; font-size:9.6px; font-weight:800; letter-spacing:0.02em; color:var(--on-ink); line-height:1;">BIM</span>
             <span style="margin-left:9.6px;">= proyecto desarrollado bajo metodología BIM</span>
           </div>
@@ -461,7 +519,7 @@
 
 </div>
 
-<div id="pfLock" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(20,16,14,0.55); align-items:center; justify-content:center; padding:16px;">
+<div id="pfLock" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(24,19,16,0.55); align-items:center; justify-content:center; padding:16px;">
   <div class="lk-card">
     <!-- Vista 1: contraseña -->
     <form id="pfLockForm" class="lk-view">
@@ -809,7 +867,7 @@ function buildTimeline() {
             xPx: (baseX + li * LINE_SPACING).toFixed(1) + 'px',
             showDot: li === 0,
             isBim: isBim,
-            dotBg: isBim ? 'var(--on-ink)' : 'var(--on-ink-muted)',
+            dotBg: isBim ? 'var(--accent-on-ink)' : 'var(--on-ink-muted)',
             fontPx: line.small ? SMALL_FONT : BASE_FONT,
           });
         });
@@ -875,26 +933,26 @@ function renderTimelineHTML() {
         }
       }
       itemsHtml += '<div style="position:absolute; left:' + item.xPx + '; bottom:' + row.baselinePx + '; width:0; height:0;">' + dotHtml +
-        '<div style="position:absolute; left:5px; bottom:4px; transform:rotate(-90deg); transform-origin:left bottom; white-space:nowrap; font-size:' + item.fontPx + '; line-height:1; color:rgba(237,233,224,0.85);">' + escapeHtml(item.t) + '</div></div>';
+        '<div style="position:absolute; left:5px; bottom:4px; transform:rotate(-90deg); transform-origin:left bottom; white-space:nowrap; font-size:' + item.fontPx + '; line-height:1; color:rgba(243,239,232,0.85);">' + escapeHtml(item.t) + '</div></div>';
     });
     rowsHtml += '<div style="display:flex; align-items:stretch;">' +
       '<div style="width:200px; flex:none; display:flex; flex-direction:column; justify-content:flex-end; box-sizing:border-box; padding:0 16.8px 0 0;">' +
       '<div style="font-size:19.2px; font-weight:800; letter-spacing:0.02em; line-height:1.25; text-transform:uppercase; padding-bottom:' + row.baselinePx + ';">' + escapeHtml(row.shortLabel) + '</div></div>' +
-      '<div style="position:relative; height:' + row.rowHeightPx + '; width:' + TIMELINE.timelineWidthPx + '; flex:none; border-top:1px solid rgba(237,233,224,0.24);">' + itemsHtml + '</div></div>';
+      '<div style="position:relative; height:' + row.rowHeightPx + '; width:' + TIMELINE.timelineWidthPx + '; flex:none; border-top:1px solid rgba(243,239,232,0.24);">' + itemsHtml + '</div></div>';
   });
 
   const monthTicksHtml = TIMELINE.monthTicks.map(function (mt) {
-    return '<div style="position:absolute; left:' + mt.xPx + '; top:0; width:1px; height:5px; background:rgba(237,233,224,0.28);"></div>';
+    return '<div style="position:absolute; left:' + mt.xPx + '; top:0; width:1px; height:5px; background:rgba(243,239,232,0.28);"></div>';
   }).join('');
   const yearTicksHtml = TIMELINE.yearTicks.map(function (yr) {
-    return '<div style="position:absolute; left:' + yr.xPx + '; top:0;"><div style="width:1px; height:9px; background:rgba(237,233,224,0.55);"></div>' +
+    return '<div style="position:absolute; left:' + yr.xPx + '; top:0;"><div style="width:1px; height:9px; background:rgba(243,239,232,0.55);"></div>' +
       '<div style="margin-top:8.4px; font-size:17.4px; font-weight:800; letter-spacing:0.02em; white-space:nowrap;">' + yr.year + '</div></div>';
   }).join('');
 
   const axisHtml = '<div style="display:flex; align-items:stretch; margin-top:6px;">' +
     '<div style="width:200px; flex:none;"></div>' +
     '<div style="position:relative; height:46px; width:' + TIMELINE.timelineWidthPx + '; flex:none;">' +
-    '<div style="position:absolute; left:0; right:0; top:0; height:2px; background:rgba(237,233,224,0.35);"></div>' +
+    '<div style="position:absolute; left:0; right:0; top:0; height:2px; background:rgba(243,239,232,0.35);"></div>' +
     monthTicksHtml + yearTicksHtml + '</div></div>';
 
   return rowsHtml + axisHtml;
@@ -945,7 +1003,7 @@ function renderTimelineVerticalHTML() {
 
   const yearTicksHtml = VT.yearTicksV.map(function (yt) {
     return '<div style="position:absolute; left:0; top:' + yt.yPx + '; width:' + V_AXIS_W + 'px; height:1px;">' +
-      '<div style="position:absolute; right:0; top:0; width:7px; height:1px; background:rgba(237,233,224,0.55);"></div>' +
+      '<div style="position:absolute; right:0; top:0; width:7px; height:1px; background:rgba(243,239,232,0.55);"></div>' +
       '<div style="position:absolute; right:9.6px; top:0; transform:translateY(-50%) rotate(-90deg); transform-origin:right center; font-size:15.6px; font-weight:800; letter-spacing:0.02em; white-space:nowrap;">' + yt.year + '</div></div>';
   }).join('');
 
@@ -957,12 +1015,12 @@ function renderTimelineVerticalHTML() {
     let itemsHtml = '';
     col.items.forEach(function (item) {
       const dotHtml = '<span style="position:absolute; left:' + (V_LINE_X - 3.2) + 'px; top:' + item.yPx + '; transform:translateY(-50%); width:6.4px; height:6.4px; border-radius:50%; background:var(--on-ink-muted);"></span>';
-      itemsHtml += '<div style="position:absolute; left:' + (V_LINE_X + 8) + 'px; top:' + item.yPx + '; transform:translateY(-50%); width:' + V_LABEL_MAXW + 'px; font-size:' + V_ITEM_FONT + '; line-height:1.25; color:rgba(237,233,224,0.85);">' + escapeHtml(item.t) + '</div>' + dotHtml;
+      itemsHtml += '<div style="position:absolute; left:' + (V_LINE_X + 8) + 'px; top:' + item.yPx + '; transform:translateY(-50%); width:' + V_LABEL_MAXW + 'px; font-size:' + V_ITEM_FONT + '; line-height:1.25; color:rgba(243,239,232,0.85);">' + escapeHtml(item.t) + '</div>' + dotHtml;
     });
     colsHtml += '<div style="position:relative; flex:none; width:' + VT.colWidthPx + '; margin-right:' + V_COL_GAP + 'px; height:' + VT.totalHeight + 'px;">' +
       '<div style="position:absolute; top:0; left:0; width:100%; height:' + V_HEADER_H + 'px; display:flex; align-items:flex-end; justify-content:center; box-sizing:border-box; padding-bottom:10px;">' +
       '<div style="white-space:normal; text-align:center; font-size:11.4px; font-weight:800; letter-spacing:0.01em; line-height:1.15; text-transform:uppercase;">' + escapeHtml(col.shortLabel) + '</div></div>' +
-      '<div style="position:absolute; top:' + V_ITEMS_TOP + 'px; left:' + V_LINE_X + 'px; width:1px; height:' + VT.axisHeightPx + '; background:rgba(237,233,224,0.28);"></div>' +
+      '<div style="position:absolute; top:' + V_ITEMS_TOP + 'px; left:' + V_LINE_X + 'px; width:1px; height:' + VT.axisHeightPx + '; background:rgba(243,239,232,0.28);"></div>' +
       itemsHtml + '</div>';
   });
 
