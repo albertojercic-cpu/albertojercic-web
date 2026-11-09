@@ -72,7 +72,8 @@
   .ficha dl div { border-top: 1px solid var(--cafe-16); padding-top: 14px; }
   .ficha dt { font-size: 11px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--cafe-62); }
   .ficha dd { margin: 6px 0 0; font-size: 17px; font-weight: 500; }
-  .ficha dd.pasos span { display: block; }
+  .ficha dd.pasos span { display: block; position: relative; padding-left: 18px; }
+  .ficha dd.pasos span::before { content: ""; position: absolute; left: 2px; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--cafe); }
   .ficha dd.pasos span + span { margin-top: 4px; }
 
   .descargas h3 { margin: 0 0 20px; font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--cafe-62); }
@@ -245,7 +246,7 @@
         <div><dt>Autor</dt><dd>Arq. Alberto Jercic Martinic</dd></div>
         <div><dt>Año</dt><dd>2026</dd></div>
         <div><dt>Programa</dt><dd>Workshop BIM + IA · The Bim Cowork</dd></div>
-        <div><dt>Flujo de trabajo</dt><dd class="pasos"><span>Proyecto desarrollado en Revit</span><span>Imágenes renderizadas con Nano Banana (Google Gemini)</span><span>Animación con Kling AI</span><span>Página creada junto a Claude, de Anthropic</span></dd></div>
+        <div><dt>Flujo de trabajo</dt><dd class="pasos"><span>Proyecto desarrollado en Revit</span><span>Imágenes renderizadas con Nano Banana<br>(Google Gemini)</span><span>Animación con Kling AI</span><span>Página creada junto a Claude, de Anthropic</span></dd></div>
       </dl>
     </div>
 
