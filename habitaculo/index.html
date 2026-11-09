@@ -72,13 +72,8 @@
   .ficha dl div { border-top: 1px solid var(--cafe-16); padding-top: 14px; }
   .ficha dt { font-size: 11px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--cafe-62); }
   .ficha dd { margin: 6px 0 0; font-size: 17px; font-weight: 500; }
-  .flujo-bloque { margin-top: 36px; background: var(--cafe); color: var(--crema); border-radius: 18px; padding: clamp(22px, 2.4vw, 30px); }
-  .flujo-bloque h3 { margin: 0 0 18px; font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--crema-66); }
-  .flujo-bloque ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: paso; }
-  .flujo-bloque li { counter-increment: paso; display: grid; grid-template-columns: 34px minmax(0, 1fr); align-items: baseline; padding: 14px 0; border-top: 1px solid var(--crema-28); }
-  .flujo-bloque li::before { content: counter(paso, decimal-leading-zero); font-size: 12px; font-weight: 600; color: var(--crema-66); font-variant-numeric: tabular-nums; }
-  .flujo-bloque b { display: block; font-size: clamp(17px, 1.7vw, 20px); font-weight: 700; }
-  .flujo-bloque span { display: block; margin-top: 3px; font-size: 13px; color: var(--crema-66); letter-spacing: .01em; }
+  .ficha dd.pasos span { display: block; }
+  .ficha dd.pasos span + span { margin-top: 4px; }
 
   .descargas h3 { margin: 0 0 20px; font-size: 12px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; color: var(--cafe-62); }
   .lista { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--cafe-16); }
@@ -250,16 +245,8 @@
         <div><dt>Autor</dt><dd>Arq. Alberto Jercic Martinic</dd></div>
         <div><dt>Año</dt><dd>2026</dd></div>
         <div><dt>Programa</dt><dd>Workshop BIM + IA · The Bim Cowork</dd></div>
+        <div><dt>Flujo de trabajo</dt><dd class="pasos"><span>Proyecto desarrollado en Revit</span><span>Imágenes renderizadas con Nano Banana (Google Gemini)</span><span>Animación con Kling AI</span><span>Página creada junto a Claude, de Anthropic</span></dd></div>
       </dl>
-      <div class="flujo-bloque">
-        <h3>Flujo de trabajo</h3>
-        <ol>
-          <li><div><b>Revit</b><span>Proyecto desarrollado en modelo BIM</span></div></li>
-          <li><div><b>Nano Banana (Google Gemini)</b><span>Imágenes renderizadas</span></div></li>
-          <li><div><b>Kling AI</b><span>Animación del recorrido</span></div></li>
-          <li><div><b>Claude, de Anthropic</b><span>Página creada junto a Claude</span></div></li>
-        </ol>
-      </div>
     </div>
 
     <div class="descargas">
