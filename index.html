@@ -1187,7 +1187,7 @@ habOverlay.addEventListener('click', function (e) { if (e.target === habOverlay)
 document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && habOverlay.style.display === 'flex') closeHabitaculo(); });
 
 // Acceso temporal con contraseña al portafolio (se guarda solo el hash, no la clave)
-const PF_PASS_HASH = '292ff9b57506228af93442578476732c8effef45a2ef9f67031788ce9c8d017e';
+const PF_PASS_HASH = 'e896de59cee84d955acaa73a3ae501d32925d74dea82a4bf58ea1d52376bd19a';
 async function pfHash(txt) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt));
   return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
